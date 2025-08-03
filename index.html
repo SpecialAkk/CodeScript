@@ -18,31 +18,30 @@
             padding: 20px;
             text-align: center;
             border-bottom: 2px solid #1a3a5a;
-            display: flex; /* Make header a flex container */
-            align-items: center; /* Vertically align items */
-            justify-content: center; /* Center horizontally */
-            position: relative; /* For potential absolute positioning later if needed */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
         }
 
         h1 {
             color: #ffffff;
-            margin: 0; /* Remove default margin */
+            margin: 0;
         }
 
-        /* NEW: Style for the profile image in the header */
         .header-profile-pic {
-            width: 40px; /* Adjust size as needed */
+            width: 40px;
             height: 40px;
-            border-radius: 50%; /* Make it circular */
-            margin-left: 15px; /* Space from the H1 title */
-            vertical-align: middle; /* Align with text */
-            border: 2px solid #007bff; /* Blue border */
-            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Glowing effect */
-            transition: transform 0.2s ease; /* Smooth transition for hover */
+            border-radius: 50%;
+            margin-left: 15px;
+            vertical-align: middle;
+            border: 2px solid #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+            transition: transform 0.2s ease;
         }
 
         .header-profile-pic:hover {
-            transform: scale(1.1); /* Slightly enlarge on hover */
+            transform: scale(1.1);
         }
 
         main {
@@ -193,7 +192,7 @@
         }
 
         .info-panel.expanded {
-            max-height: 500px;
+            max-height: 500px; /* Adjust if content is very long */
             padding: 15px;
         }
 
@@ -205,22 +204,21 @@
             padding-bottom: 5px;
         }
 
-        .info-panel p {
+        .info-panel p, .info-panel ul, .info-panel ul li {
             font-size: 0.9em;
             line-height: 1.6;
             color: #c0c0c0;
-            margin-bottom: 10px;
+            margin-bottom: 10px; /* Adjusted for list items too */
         }
-
         .info-panel ul {
             list-style-type: disc;
             margin-left: 20px;
-            color: #c0c0c0;
             padding: 0;
         }
         .info-panel ul li {
             margin-bottom: 5px;
         }
+
 
         footer {
             background-color: #0a1420;
@@ -269,12 +267,88 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/Best-Fps
                 <div class="info-panel">
                     <h3>Update Log (Fps Booster)</h3>
                     <ul>
-                        <li>**[2025-08-03]**: First version. Performance optimization.</li>
-                        <li>**[2025-08-01]**: Added support for new game engines.</li>
+                        <li>**Update 1:**
+                            <ul>
+                                <li>Accelerated work script</li>
+                                <li>Code optimized</li>
+                                <li>Added new FPS boosting features</li>
+                            </ul>
+                        </li>
+                        <li>**Update 2:**
+                            <ul>
+                                <li>Reduced checks so that the script itself does not produce logs</li>
+                                <li>Added game optimization features</li>
+                                <li>The script has been partially optimized</li>
+                                <li>Removed some functions that produce lags</li>
+                            </ul>
+                        </li>
+                        <li>**Update 3:**
+                            <ul>
+                                <li>Added "RenderFidelity" function to optimize complex effects such as "Tessellation"</li>
+                                <li>Some functions have been fixed</li>
+                                <li>Added a new way to gradually optimize the game when there are lags</li>
+                            </ul>
+                        </li>
+                        <li>**Update 4:**
+                            <ul>
+                                <li>Removed functions that could reduce FPS</li>
+                                <li>Some parts of the code have been fixed</li>
+                            </ul>
+                        </li>
+                        <li>**Update 5:**
+                            <ul>
+                                <li>Added "Z._M14" function to clean garbage</li>
+                                <li>Improved game optimization</li>
+                            </ul>
+                        </li>
+                        <li>**Update 6:**
+                            <ul>
+                                <li>Optimization</li>
+                            </ul>
+                        </li>
+                        <li>**Update 7:**
+                            <ul>
+                                <li>Improved Z._M1 function</li>
+                                <li>Improved Z._M6 function</li>
+                                <li>Added _M10 function for smoothness</li>
+                                <li>Improved Z._M8 function to better support different effects</li>
+                            </ul>
+                        </li>
+                        <li>**Update 8:**
+                            <ul>
+                                <li>Removed Z._scriptManager function</li>
+                                <li>Removed Z._M10 function</li>
+                                <li>Improved Z._clientInterpolator function</li>
+                                <li>Improved Z._M9 function</li>
+                                <li>Improved Z._M8 function</li>
+                                <li>Improved Z._M7 function</li>
+                                <li>Improved Z._M6 function</li>
+                                <li>Improved Z._M1 core function</li>
+                                <li>Improved Z._M14 function</li>
+                                <li>Improved Z._M13 function</li>
+                                <li>Improved Z._M2 function</li>
+                                <li>Improved Z._memoryManager function</li>
+                            </ul>
+                        </li>
+                        <li>**Update 9:**
+                            <ul>
+                                <li>Improved functions</li>
+                                <li>Optimized Z._M5 function</li>
+                                <li>Improved Z._M2 function</li>
+                                <li>Improved Z._memoryManager function</li>
+                                <li>Improved Z._clientInterpolator function</li>
+                                <li>Improved Z._M4 function</li>
+                                <li>Improved Z._M1 core function</li>
+                                <li>Added Z._M11 function</li>
+                                <li>Improved Z._M6 function</li>
+                                <li>Improved Z._M8 function</li>
+                                <li>Improved Z._M7 function</li>
+                                <li>Improved Z._M9 function</li>
+                                <li>Added Z. _M12 function</li>
+                            </ul>
+                        </li>
                     </ul>
-                    <h3>Information (Fps Booster)</h3>
-                    <p>This script significantly increases the frames per second (FPS) in Roblox, making gameplay smoother and more responsive. It optimizes rendering and disables unnecessary effects without compromising visual quality.</p>
-                </div>
+                    </div>
             </div>
         </section>
 
@@ -408,4 +482,4 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
         });
     </script>
 </body>
-                </html>
+    </html>
