@@ -1,1 +1,1 @@
-# CodeScript.github.io
+# CodeScript
