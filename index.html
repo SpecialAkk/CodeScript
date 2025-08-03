@@ -186,14 +186,15 @@
             border-radius: 5px;
             margin-top: 15px;
             padding: 0 15px;
-            overflow: hidden;
+            overflow: hidden; /* This is for the expand/collapse animation */
             transition: max-height 0.5s ease-out, padding 0.5s ease-out;
             max-height: 0;
         }
 
         .info-panel.expanded {
-            max-height: 500px;
+            max-height: 500px; /* Adjust if content is very long */
             padding: 15px;
+            overflow-y: auto; /* Added vertical scroll for info panel itself if needed */
         }
 
         .info-panel h3 {
@@ -215,13 +216,33 @@
             list-style-type: disc;
             margin-left: 20px;
             padding: 0;
-            /* NEW: Horizontal scrolling for the update log */
+            /* Force horizontal scrolling */
             overflow-x: auto;
-            padding-bottom: 10px; /* Add padding for scrollbar visibility */
+            white-space: nowrap; /* Keep content on a single line */
+            padding-bottom: 10px; /* Space for the scrollbar */
         }
+
         .info-panel ul li {
+            display: inline-block; /* Treat list items as inline blocks to allow horizontal flow */
+            min-width: 100%; /* Make each list item at least 100% of the panel width to ensure scrolling for long content */
+            white-space: normal; /* Allow text inside the li to wrap vertically if it's too long, but keep the li in a horizontal flow */
+            vertical-align: top; /* Align list items to the top if they are different heights */
             margin-bottom: 5px;
-            white-space: normal; /* Allow text to wrap within each list item */
+            padding-right: 20px; /* Extra space between items if they were to wrap, helps with scroll */
+        }
+
+        /* Adjustments for nested lists if they need individual horizontal scroll */
+        .info-panel ul ul {
+            white-space: normal; /* Allow inner lists to wrap naturally */
+            overflow-x: visible; /* Don't force inner lists to scroll horizontally unless explicitly wide */
+            padding-bottom: 0;
+        }
+
+        .info-panel ul ul li {
+            display: list-item; /* Restore default list item behavior for nested lists */
+            min-width: auto;
+            white-space: normal;
+            padding-right: 0;
         }
 
 
@@ -465,26 +486,4 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
                 });
             });
 
-            const optionsButtons = document.querySelectorAll('.options-button');
-            optionsButtons.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const scriptCard = event.target.closest('.script-card');
-                    const infoPanel = scriptCard.querySelector('.info-panel');
-                    const ellipsisIcon = button.querySelector('.ellipsis-icon');
-                    const closeIcon = button.querySelector('.close-icon');
-
-                    infoPanel.classList.toggle('expanded');
-
-                    if (infoPanel.classList.contains('expanded')) {
-                        ellipsisIcon.style.display = 'none';
-                        closeIcon.style.display = 'block';
-                    } else {
-                        ellipsisIcon.style.display = 'block';
-                        closeIcon.style.display = 'none';
-                    }
-                });
-            });
-        });
-    </script>
-</body>
-                                </html>
+            const optionsButtons = document.querySelectorAll('.option
