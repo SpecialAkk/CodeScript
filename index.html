@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Игра: Сборщик предметов 2.0</title>
+    <title>Игра: Сборщик предметов 2.2</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -30,7 +30,7 @@
             position: relative;
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
             overflow: hidden;
-            touch-action: none; /* Для лучшей работы на мобильных устройствах */
+            touch-action: none;
         }
 
         #player {
@@ -43,7 +43,12 @@
             left: 50%;
             transform: translate(-50%, -50%);
             box-shadow: 0 0 15px #ff6f61;
-            transition: background-color 0.2s;
+            transition: background-color 0.2s, box-shadow 0.2s;
+        }
+        
+        .player-boosted {
+            background-color: #5cb85c !important;
+            box-shadow: 0 0 20px #5cb85c, 0 0 5px #5cb85c;
         }
 
         .item {
@@ -69,7 +74,7 @@
         }
 
         .controls {
-            display: none; /* По умолчанию скрываем */
+            display: flex; 
             position: fixed;
             bottom: 20px;
             left: 50%;
@@ -93,22 +98,27 @@
         .controls button:active {
             background-color: rgba(0, 0, 0, 0.8);
         }
+
+        /* Стиль для кнопки ускорения */
+        #speed-btn {
+            background-color: #f0ad4e;
+            color: white;
+        }
+        #speed-btn:active {
+            background-color: #ec971f;
+        }
         
-        /* Адаптивный дизайн для мобильных */
         @media (max-width: 600px) {
             #game-container {
                 width: 95%;
                 height: 300px;
-            }
-            .controls {
-                display: flex;
             }
         }
     </style>
 </head>
 <body>
 
-    <h1>Сборщик предметов 2.0</h1>
+    <h1>Сборщик предметов 2.2</h1>
     <div id="game-container">
         <div id="player"></div>
         </div>
@@ -119,6 +129,7 @@
         <button id="left-btn">←</button>
         <button id="right-btn">→</button>
         <button id="down-btn">↓</button>
+        <button id="speed-btn">⚡️</button>
     </div>
 
     <script>
@@ -129,29 +140,27 @@
         const downBtn = document.getElementById('down-btn');
         const leftBtn = document.getElementById('left-btn');
         const rightBtn = document.getElementById('right-btn');
+        const speedBtn = document.getElementById('speed-btn');
 
         let score = 0;
         let playerX = 250;
         let playerY = 200;
-        const playerSpeed = 5;
+        let playerSpeed = 5; // Базовая скорость
+        let isBoosted = false;
 
-        // Генерация случайного числа для спавна предметов
         function getRandomInt(max) {
             return Math.floor(Math.random() * max);
         }
 
-        // Обновление позиции игрока
         function updatePlayerPosition() {
             player.style.left = `${playerX}px`;
             player.style.top = `${playerY}px`;
         }
 
-        // Создание предметов
         function createItem() {
             const item = document.createElement('div');
             item.className = 'item';
 
-            // "Прикол": каждый 5-й предмет будет особенным
             if (score % 5 === 0 && score > 0) {
                 item.classList.add('special-item');
             }
@@ -163,7 +172,6 @@
             gameContainer.appendChild(item);
         }
 
-        // Проверка столкновений
         function checkCollision() {
             const items = document.querySelectorAll('.item');
             const playerRect = player.getBoundingClientRect();
@@ -181,13 +189,11 @@
                     score++;
                     scoreDisplay.textContent = `Счёт: ${score}`;
 
-                    // "Прикол": особый эффект для специального предмета
                     if (item.classList.contains('special-item')) {
                         player.style.backgroundColor = 'gold';
                         setTimeout(() => {
-                            player.style.backgroundColor = '#ff6f61';
+                            if (!isBoosted) player.style.backgroundColor = '#ff6f61';
                         }, 500);
-                        // Дополнительный "прикол": создаем сразу 3 новых предмета
                         for (let i = 0; i < 3; i++) {
                             createItem();
                         }
@@ -196,6 +202,24 @@
                     }
                 }
             });
+        }
+
+        // Новая функция для активации ускорения
+        function activateSpeedBoost() {
+            if (isBoosted) return; // Нельзя активировать повторно
+
+            isBoosted = true;
+            playerSpeed = 10; // Увеличиваем скорость
+            player.classList.add('player-boosted'); // Добавляем класс для визуального эффекта
+            speedBtn.disabled = true; // Отключаем кнопку
+
+            // Через 3 секунды возвращаем всё в норму
+            setTimeout(() => {
+                playerSpeed = 5;
+                isBoosted = false;
+                player.classList.remove('player-boosted');
+                speedBtn.disabled = false;
+            }, 3000);
         }
 
         // Управление с клавиатуры
@@ -208,9 +232,9 @@
                 case 'ArrowDown': newPlayerY += playerSpeed; break;
                 case 'ArrowLeft': newPlayerX -= playerSpeed; break;
                 case 'ArrowRight': newPlayerX += playerSpeed; break;
+                case 'Shift': activateSpeedBoost(); break; // Активация ускорения на Shift
             }
 
-            // Проверка, чтобы игрок не выходил за границы
             if (newPlayerX >= 0 && newPlayerX <= gameContainer.offsetWidth - player.offsetWidth) {
                 playerX = newPlayerX;
             }
@@ -249,8 +273,9 @@
         downBtn.addEventListener('touchstart', () => handleTouchMove('down'));
         leftBtn.addEventListener('touchstart', () => handleTouchMove('left'));
         rightBtn.addEventListener('touchstart', () => handleTouchMove('right'));
+        // Активация ускорения по тачу
+        speedBtn.addEventListener('touchstart', activateSpeedBoost);
 
-        // Начало игры
         createItem();
     </script>
 </body>
