@@ -4,6 +4,209 @@
   <title>print("Hello, World!")</title>
 </head>
 <body>
-<pre><code>print("Hello, World!")</code></pre>
+<pre><code>-- 📌 LocalScript
+
+-- ⚙️ Сервисы
+local Players = game:GetService("Players")
+local TweenService = game:GetService("TweenService")
+local UserInputService = game:GetService("UserInputService")
+local player = Players.LocalPlayer
+local PlayerGui = player:WaitForChild("PlayerGui")
+
+-- 📊 Переменные
+local resetCount = 0
+local requiredResets = 30
+local characterName = "dustdustdust"
+local running = false
+local isFirstReset = true
+local DELAY = 0.2
+
+-- 📺 Интерфейс
+local gui = Instance.new("ScreenGui", PlayerGui)
+gui.Name = "ResetGui"
+gui.ResetOnSpawn = false
+
+local frame = Instance.new("Frame", gui)
+frame.Size = UDim2.new(0, 280, 0, 230)
+frame.Position = UDim2.new(0.5, -140, 0.2, 0)
+frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+frame.BackgroundTransparency = 0.1
+frame.AnchorPoint = Vector2.new(0.5, 0)
+frame.Active = true
+Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
+
+-- 🌈 Тень и анимация
+local stroke = Instance.new("UIStroke", frame)
+stroke.Color = Color3.fromRGB(80, 120, 255)
+stroke.Thickness = 1.2
+stroke.Transparency = 0.4
+
+frame:TweenSize(frame.Size, "Out", "Sine", 0.3, true)
+
+-- 📱 Перетаскивание (ПК и Мобильные)
+local dragging = false
+local dragInput, dragStart, startPos
+
+frame.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragStart = input.Position
+		startPos = frame.Position
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+UserInputService.InputChanged:Connect(function(input)
+	if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+		local delta = input.Position - dragStart
+		frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+	end
+end)
+
+-- 👤 Поле ввода персонажа
+local charInput = Instance.new("TextBox", frame)
+charInput.PlaceholderText = "Имя персонажа"
+charInput.Text = characterName
+charInput.Size = UDim2.new(1, -20, 0, 30)
+charInput.Position = UDim2.new(0, 10, 0, 10)
+charInput.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+charInput.TextColor3 = Color3.new(1,1,1)
+charInput.Font = Enum.Font.Gotham
+charInput.TextSize = 16
+charInput.ClearTextOnFocus = false
+Instance.new("UICorner", charInput).CornerRadius = UDim.new(0, 6)
+
+-- 🔢 Поле ввода сбросов
+local resetInput = Instance.new("TextBox", frame)
+resetInput.PlaceholderText = "Сколько нужно сбросов"
+resetInput.Text = tostring(requiredResets)
+resetInput.Size = UDim2.new(1, -20, 0, 30)
+resetInput.Position = UDim2.new(0, 10, 0, 50)
+resetInput.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+resetInput.TextColor3 = Color3.new(1,1,1)
+resetInput.Font = Enum.Font.Gotham
+resetInput.TextSize = 16
+resetInput.ClearTextOnFocus = false
+Instance.new("UICorner", resetInput).CornerRadius = UDim.new(0, 6)
+
+-- 🔘 Кнопка запуска
+local toggleButton = Instance.new("TextButton", frame)
+toggleButton.Text = "▶ ВКЛЮЧИТЬ"
+toggleButton.Size = UDim2.new(1, -20, 0, 40)
+toggleButton.Position = UDim2.new(0, 10, 0, 90)
+toggleButton.BackgroundColor3 = Color3.fromRGB(70, 120, 70)
+toggleButton.TextColor3 = Color3.new(1, 1, 1)
+toggleButton.Font = Enum.Font.GothamBold
+toggleButton.TextSize = 18
+Instance.new("UICorner", toggleButton).CornerRadius = UDim.new(0, 8)
+
+-- 📊 Метка статуса
+local statusLabel = Instance.new("TextLabel", frame)
+statusLabel.Size = UDim2.new(1, -20, 0, 30)
+statusLabel.Position = UDim2.new(0, 10, 0, 140)
+statusLabel.BackgroundTransparency = 1
+statusLabel.TextColor3 = Color3.new(1,1,1)
+statusLabel.Text = "Сбросов: 0 / " .. requiredResets
+statusLabel.Font = Enum.Font.Gotham
+statusLabel.TextSize = 16
+statusLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+-- 🌟 Эффект завершения
+local function flashEffect()
+	local flash = Instance.new("Frame", frame)
+	flash.Size = UDim2.new(1, 0, 1, 0)
+	flash.BackgroundColor3 = Color3.new(1, 1, 1)
+	flash.BackgroundTransparency = 1
+	flash.ZIndex = 10
+	flash.Parent = frame
+
+	local tween = TweenService:Create(flash, TweenInfo.new(0.3), {BackgroundTransparency = 0.7})
+	tween:Play()
+	tween.Completed:Wait()
+	flash:Destroy()
+end
+
+-- 🔁 Получение RemoteEvent
+local function getRemote()
+	return player:WaitForChild("PlayerGui"):WaitForChild("SelectCharacterGui")
+		:WaitForChild("Frame"):WaitForChild("RemoteEvent")
+end
+
+-- 📤 Выбор персонажа
+local function pickCharacter()
+	local success, remote = pcall(getRemote)
+	if success and remote then
+		remote:FireServer(characterName, false)
+	end
+end
+
+-- 💀 Сброс
+local function killCharacter()
+	if player.Character then
+		player.Character:BreakJoints()
+	end
+end
+
+-- 🔁 Цикл сбросов
+local function resetLoop()
+	while running and resetCount < requiredResets do
+		pickCharacter()
+		repeat task.wait() until player.Character
+
+		killCharacter()
+
+		-- Ждём смерти
+		repeat task.wait() until not player.Character or not player.Character:FindFirstChild("Humanoid")
+
+		-- Ждём возрождения
+		repeat task.wait() until player.Character and player.Character:FindFirstChild("Humanoid")
+
+		-- Засчёт сброса
+		if isFirstReset then
+			resetCount += 1
+			isFirstReset = false
+		else
+			resetCount += 0.5
+		end
+
+		statusLabel.Text = string.format("Сбросов: %.1f / %s", resetCount, tostring(requiredResets))
+		task.wait(DELAY)
+	end
+
+	if resetCount >= requiredResets then
+		toggleButton.Text = "✅ ГОТОВО"
+		toggleButton.BackgroundColor3 = Color3.fromRGB(100, 170, 100)
+		flashEffect()
+		running = false
+	end
+end
+
+-- ▶ Обработка кнопки
+toggleButton.MouseButton1Click:Connect(function()
+	if not running then
+		local num = tonumber(resetInput.Text)
+		if num and num > 0 then requiredResets = num end
+
+		local name = charInput.Text
+		if name ~= "" then characterName = name end
+
+		-- Сброс состояния
+		resetCount = 0
+		isFirstReset = true
+		statusLabel.Text = "Сбросов: 0 / " .. requiredResets
+		toggleButton.Text = "⏸ ОСТАНОВИТЬ"
+		toggleButton.BackgroundColor3 = Color3.fromRGB(170, 60, 60)
+		running = true
+		task.spawn(resetLoop)
+	else
+		running = false
+		toggleButton.Text = "▶ ВКЛЮЧИТЬ"
+		toggleButton.BackgroundColor3 = Color3.fromRGB(70, 120, 70)
+	end
+end)</code></pre>
 </body>
 </html>
