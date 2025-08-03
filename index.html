@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>My Delta Exploit Scripts Website</title>
     <style>
-        /* style.css - integrated */
         body {
             font-family: Arial, sans-serif;
-            background-color: #0d1a2e; /* Dark blue background */
-            color: #e0e0e0; /* Light text */
+            background-color: #0d1a2e;
+            color: #e0e0e0;
             margin: 0;
             padding: 0;
         }
 
         header {
-            background-color: #0a1420; /* Even darker for header */
+            background-color: #0a1420;
             padding: 20px;
             text-align: center;
             border-bottom: 2px solid #1a3a5a;
@@ -28,37 +27,36 @@
         main {
             padding: 20px;
             display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
             gap: 30px;
         }
 
         .script-card {
-            background-color: #1a2b40; /* Slightly lighter dark blue for cards */
+            background-color: #1a2b40;
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba[0, 0, 0, 0.3];
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
         }
 
         .script-image-container {
             width: 100%;
-            height: 200px; /* Фиксированная высота для области изображения */
+            height: 200px;
             overflow: hidden;
             display: flex;
             align-items: center;
             justify-content: center;
-            background-color: #0a1420; /* Фоновый цвет */
+            background-color: #0a1420;
         }
 
         .script-image-container img {
             width: 100%;
             height: 100%;
-            object-fit: fill; /* ИЗМЕНЕНО: РАСТЯНЕТ ИЗОБРАЖЕНИЕ ПОЛНОСТЬЮ */
-            filter: brightness(0.7); /* Затемнение */
+            object-fit: fill;
+            filter: brightness(0.7);
             display: block;
         }
-
 
         .script-card h2 {
             color: #ffffff;
@@ -67,7 +65,6 @@
             text-align: center;
         }
 
-        /* Style for code container */
         .code-container {
             position: relative;
             background-color: #0a1420;
@@ -76,16 +73,7 @@
             padding: 15px;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
             border: 1px solid #1f3f5a;
-        }
-
-        .code-block {
-            color: #4a90e2;
-            overflow-x: auto;
-            font-family: 'Consolas', 'Monaco', monospace;
-            font-size: 14px;
-            white-space: pre-wrap;
-            padding-right: 40px;
-            margin: 0;
+            overflow: visible;
         }
 
         .copy-button {
@@ -118,6 +106,86 @@
             fill: currentColor;
         }
 
+        .options-button {
+            position: absolute;
+            top: 10px;
+            right: 50px;
+            background-color: #6c757d;
+            color: white;
+            width: 34px;
+            height: 34px;
+            border: none;
+            border-radius: 50%;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            z-index: 10;
+            padding: 0;
+        }
+
+        .options-button:hover {
+            background-color: #5a6268;
+            transform: scale(1.05);
+        }
+
+        .options-button svg {
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
+        }
+
+        .code-block {
+            color: #4a90e2;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            white-space: pre-wrap;
+            padding-right: 90px;
+            margin: 0;
+        }
+
+        .info-panel {
+            background-color: #1f3f5a;
+            border-radius: 5px;
+            margin-top: 15px;
+            padding: 0 15px;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
+            max-height: 0;
+        }
+
+        .info-panel.expanded {
+            max-height: 500px;
+            padding: 15px;
+        }
+
+        .info-panel h3 {
+            color: #ffffff;
+            margin-top: 0;
+            margin-bottom: 10px;
+            border-bottom: 1px solid #2d4c6d;
+            padding-bottom: 5px;
+        }
+
+        .info-panel p {
+            font-size: 0.9em;
+            line-height: 1.6;
+            color: #c0c0c0;
+            margin-bottom: 10px;
+        }
+
+        .info-panel ul {
+            list-style-type: disc;
+            margin-left: 20px;
+            color: #c0c0c0;
+            padding: 0;
+        }
+        .info-panel ul li {
+            margin-bottom: 5px;
+        }
+
         footer {
             background-color: #0a1420;
             color: #a0a0a0;
@@ -130,7 +198,7 @@
 </head>
 <body>
     <header>
-        <h1>Our Delta Exploit Scripts</h1>
+        <h1>MEGGD Scripts</h1>
     </header>
 
     <main>
@@ -143,11 +211,26 @@
                 <pre class="code-block">
 loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/Best-Fps-Booster/refs/heads/main/Best%20Fps%20Booster", true))()
                 </pre>
+                <button class="options-button" title="Info & Updates">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                </button>
                 <button class="copy-button" title="Copy Code">
                     <svg viewBox="0 0 24 24">
                         <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
                     </svg>
                 </button>
+
+                <div class="info-panel">
+                    <h3>Update Log (Fps Booster)</h3>
+                    <ul>
+                        <li>**[2025-08-03]**: First version. Performance optimization.</li>
+                        <li>**[2025-08-01]**: Added support for new game engines.</li>
+                    </ul>
+                    <h3>Information (Fps Booster)</h3>
+                    <p>This script significantly increases the frames per second (FPS) in Roblox, making gameplay smoother and more responsive. It optimizes rendering and disables unnecessary effects without compromising visual quality.</p>
+                </div>
             </div>
         </section>
 
@@ -160,11 +243,26 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/Best-Fps
                 <pre class="code-block">
 loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/All-special-characters-unlocked/refs/heads/main/All%20special%20characters%20unlocked", true))()
                 </pre>
+                <button class="options-button" title="Info & Updates">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                </button>
                 <button class="copy-button" title="Copy Code">
                     <svg viewBox="0 0 24 24">
                         <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
                     </svg>
                 </button>
+
+                <div class="info-panel">
+                    <h3>Update Log (Unknown Battle Simulator)</h3>
+                    <ul>
+                        <li>**[2025-08-03]**: Initial version. Unlocks all characters.</li>
+                        <li>**[2025-07-28]**: Improved script stability.</li>
+                    </ul>
+                    <h3>Information (Unknown Battle Simulator)</h3>
+                    <p>This script allows you to unlock all special characters in Unknown Battle Simulator, giving you an edge in battle. Enjoy full access to all unique abilities and heroes.</p>
+                </div>
             </div>
         </section>
 
@@ -177,11 +275,26 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/All-spec
                 <pre class="code-block">
 loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANTI-KICK/refs/heads/main/BEST%20ANTI-KICK'))()
                 </pre>
+                <button class="options-button" title="Info & Updates">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                </button>
                 <button class="copy-button" title="Copy Code">
                     <svg viewBox="0 0 24 24">
                         <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
                     </svg>
                 </button>
+
+                <div class="info-panel">
+                    <h3>Update Log (Anti-Kick)</h3>
+                    <ul>
+                        <li>**[2025-08-03]**: Protection against all types of kicks.</li>
+                        <li>**[2025-07-26]**: Improved script stealth.</li>
+                    </ul>
+                    <h3>Information (Anti-Kick)</h3>
+                    <p>Our Anti-Kick script ensures continuous gameplay, protecting you from any attempts to be removed from a session. It operates silently, allowing you to enjoy your game without interruptions.</p>
+                </div>
             </div>
         </section>
 
@@ -192,26 +305,25 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
     </footer>
 
     <script>
-        // script.js - integrated
         document.addEventListener('DOMContentLoaded', () => {
             const copyButtons = document.querySelectorAll('.copy-button');
 
             copyButtons.forEach(button => {
-                const originalIconHTML = button.innerHTML; // Save the original icon
+                const originalIconHTML = button.innerHTML;
 
                 button.addEventListener('click', (event) => {
                     const codeBlock = event.target.closest('.code-container').querySelector('.code-block');
-                    const codeToCopy = codeBlock.textContent.trim(); // Use .trim() to remove extra whitespace
+                    const codeToCopy = codeBlock.textContent.trim();
 
                     navigator.clipboard.writeText(codeToCopy)
                         .then(() => {
                             console.log('Code copied!');
-                            button.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>'; // Checkmark icon
-                            button.style.backgroundColor = '#28a745'; // Green color for confirmation
+                            button.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>';
+                            button.style.backgroundColor = '#28a745';
 
                             setTimeout(() => {
-                                button.innerHTML = originalIconHTML; // Revert to original icon
-                                button.style.backgroundColor = '#007bff'; // Revert to original color
+                                button.innerHTML = originalIconHTML;
+                                button.style.backgroundColor = '#007bff';
                             }, 2000);
                         })
                         .catch(err => {
@@ -219,7 +331,17 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
                         });
                 });
             });
+
+            const optionsButtons = document.querySelectorAll('.options-button');
+            optionsButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const codeContainer = event.target.closest('.code-container');
+                    const infoPanel = codeContainer.querySelector('.info-panel');
+
+                    infoPanel.classList.toggle('expanded');
+                });
+            });
         });
     </script>
 </body>
-    </html>
+                </html>
