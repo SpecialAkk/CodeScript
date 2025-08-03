@@ -36,30 +36,28 @@
             background-color: #1a2b40; /* Slightly lighter dark blue for cards */
             border-radius: 8px;
             overflow: hidden;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            box-shadow: 0 4px 8px rgba[0, 0, 0, 0.3];
             display: flex;
             flex-direction: column;
         }
 
-        /* --- Изменения здесь: новый стиль для контейнера изображения --- */
         .script-image-container {
             width: 100%;
             height: 200px; /* Фиксированная высота для области изображения */
-            overflow: hidden; /* Обрезаем, если изображение выходит за пределы */
-            display: flex; /* Для центрирования изображения */
-            align-items: center; /* Центрирование по вертикали */
-            justify-content: center; /* Центрирование по горизонтали */
-            background-color: #0a1420; /* Фоновый цвет, если изображение не покрывает все */
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: #0a1420; /* Фоновый цвет */
         }
 
         .script-image-container img {
-            width: 100%; /* Изображение будет стараться заполнить всю ширину */
-            height: 100%; /* Изображение будет стараться заполнить всю высоту */
-            object-fit: contain; /* Ключевое изменение: масштабирует изображение, чтобы оно полностью поместилось в контейнер, сохраняя пропорции. Пустое пространство будет заполнено background-color родителя. */
-            filter: brightness(0.7); /* Немного затемняем изображение */
-            display: block; /* Убираем лишние пробелы под изображением */
+            width: 100%;
+            height: 100%;
+            object-fit: fill; /* ИЗМЕНЕНО: РАСТЯНЕТ ИЗОБРАЖЕНИЕ ПОЛНОСТЬЮ */
+            filter: brightness(0.7); /* Затемнение */
+            display: block;
         }
-        /* --- Конец изменений для изображения --- */
 
 
         .script-card h2 {
@@ -71,53 +69,53 @@
 
         /* Style for code container */
         .code-container {
-            position: relative; /* For button positioning */
-            background-color: #0a1420; /* Background for code container */
+            position: relative;
+            background-color: #0a1420;
             border-radius: 5px;
             margin: 0 15px 15px;
             padding: 15px;
-            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); /* Inner shadow for effect */
-            border: 1px solid #1f3f5a; /* Thin border */
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
+            border: 1px solid #1f3f5a;
         }
 
         .code-block {
-            color: #4a90e2; /* Blue color for code text */
-            overflow-x: auto; /* For horizontal scrolling if code is long */
+            color: #4a90e2;
+            overflow-x: auto;
             font-family: 'Consolas', 'Monaco', monospace;
             font-size: 14px;
-            white-space: pre-wrap; /* Wrap long lines */
-            padding-right: 40px; /* Offset for icon button */
-            margin: 0; /* Remove default <pre> margins */
+            white-space: pre-wrap;
+            padding-right: 40px;
+            margin: 0;
         }
 
         .copy-button {
-            position: absolute; /* Absolute positioning for the button */
-            top: 10px; /* Top offset */
-            right: 10px; /* Right offset */
-            background-color: #007bff; /* Bright blue button */
-            color: white; /* Icon color */
-            width: 34px; /* Button width */
-            height: 34px; /* Button height */
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #007bff;
+            color: white;
+            width: 34px;
+            height: 34px;
             border: none;
-            border-radius: 50%; /* Make button circular */
+            border-radius: 50%;
             cursor: pointer;
-            display: flex; /* For SVG centering */
-            align-items: center; /* Vertical centering */
-            justify-content: center; /* Horizontal centering */
-            transition: background-color 0.3s ease, transform 0.2s ease; /* Add transform animation */
-            z-index: 10; /* Ensure button is above code */
-            padding: 0; /* Remove inner padding */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            z-index: 10;
+            padding: 0;
         }
 
         .copy-button:hover {
-            background-color: #0056b3; /* Darker on hover */
-            transform: scale(1.05); /* Slightly enlarge on hover */
+            background-color: #0056b3;
+            transform: scale(1.05);
         }
 
         .copy-button svg {
-            width: 20px; /* Icon size */
-            height: 20px; /* Icon size */
-            fill: currentColor; /* Icon inherits button color */
+            width: 20px;
+            height: 20px;
+            fill: currentColor;
         }
 
         footer {
@@ -137,7 +135,8 @@
 
     <main>
         <section class="script-card">
-            <div class="script-image-container"> <img src="https://ucarecdn.com/a240211e-de60-4078-8284-715663da996d/1_20250803182522.png" alt="FPS Booster Script Image">
+            <div class="script-image-container">
+                <img src="https://ucarecdn.com/a240211e-de60-4078-8284-715663da996d/1_20250803182522.png" alt="FPS Booster Script Image">
             </div>
             <h2>Fps Booster</h2>
             <div class="code-container">
