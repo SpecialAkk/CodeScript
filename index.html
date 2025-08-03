@@ -125,14 +125,11 @@
 
     <main>
         <section class="script-card">
-            <div class="script-image" style="background-image: url('images/aim_wallpaper.jpg');"></div>
-            <h2>Aim Script</h2>
+            <div class="script-image" style="background-image: url('https://ucarecdn.com/a240211e-de60-4078-8284-715663da996d/1_20250803182522.png');"></div>
+            <h2>Fps Booster</h2>
             <div class="code-container">
                 <pre class="code-block">
-                    
-                 local Players = game:GetService("Players")
-                 local LocalPlayer = Players.LocalPlayer
-                 print("Aim script loaded!")
+loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/Best-Fps-Booster/refs/heads/main/Best%20Fps%20Booster", true))()
                 </pre>
                 <button class="copy-button" title="Copy Code">
                     <svg viewBox="0 0 24 24">
@@ -143,12 +140,11 @@
         </section>
 
         <section class="script-card">
-            <div class="script-image" style="background-image: url('images/dex_wallpaper.jpg');"></div>
-            <h2>Dex Explorer Script</h2>
+            <div class="script-image" style="background-image: url('https://ucarecdn.com/e61973cb-200f-4166-a3ce-020aeef2607d/3_20250803195707.png');"></div>
+            <h2>Unknown Battle Simulator</h2>
             <div class="code-container">
                 <pre class="code-block">
-
-                    loadstring(game:HttpGet("https://raw.githubusercontent.com/script/dex.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/All-special-characters-unlocked/refs/heads/main/All%20special%20characters%20unlocked", true))()
                 </pre>
                 <button class="copy-button" title="Copy Code">
                     <svg viewBox="0 0 24 24">
@@ -159,12 +155,11 @@
         </section>
 
         <section class="script-card">
-            <div class="script-image" style="background-image: url('images/anti_kick_wallpaper.jpg');"></div>
-            <h2>Anti-Kick Script</h2>
+            <div class="script-image" style="background-image: url('https://ucarecdn.com/19c82375-23e2-4e8a-ab63-b5dde0a02f5c/2_20250803194425.png');"></div>
+            <h2>Anti-Kick</h2>
             <div class="code-container">
                 <pre class="code-block">
-                
-                game:GetService("Players").LocalPlayer.PlayerRemoving:Connect(function() wait(9e9) end)
+loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANTI-KICK/refs/heads/main/BEST%20ANTI-KICK'))()
                 </pre>
                 <button class="copy-button" title="Copy Code">
                     <svg viewBox="0 0 24 24">
@@ -174,7 +169,7 @@
             </div>
         </section>
 
-        </main>
+    </main>
 
     <footer>
         <p>&copy; 2025 Our Scripts</p>
@@ -190,7 +185,7 @@
 
                 button.addEventListener('click', (event) => {
                     const codeBlock = event.target.closest('.code-container').querySelector('.code-block');
-                    const codeToCopy = codeBlock.textContent;
+                    const codeToCopy = codeBlock.textContent.trim(); // Use .trim() to remove extra whitespace
 
                     navigator.clipboard.writeText(codeToCopy)
                         .then(() => {
@@ -211,4 +206,4 @@
         });
     </script>
 </body>
-    </html>
+</html>
