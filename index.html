@@ -58,11 +58,23 @@
             display: block;
         }
 
+        /* NEW: Container for title and options button */
+        .script-title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 15px;
+            position: relative; /* For absolute positioning of button */
+            background-color: #1a2b40; /* Match card background */
+            margin-bottom: -15px; /* Pull it closer to the code block */
+        }
+
         .script-card h2 {
             color: #ffffff;
-            padding: 15px;
             margin: 0;
-            text-align: center;
+            text-align: center; /* Still center text */
+            flex-grow: 1; /* Allow title to take available space */
+            padding-right: 40px; /* Make space for the button if it overlaps */
         }
 
         .code-container {
@@ -106,34 +118,40 @@
             fill: currentColor;
         }
 
+        /* NEW: Styling for the options button - moved and styled */
         .options-button {
-            position: absolute;
-            top: 10px;
-            right: 50px;
-            background-color: #6c757d;
-            color: white;
-            width: 34px;
-            height: 34px;
+            position: absolute; /* Absolute within .script-title-container */
+            right: 15px; /* Position relative to .script-title-container */
+            background-color: transparent; /* Transparent background */
+            color: #007bff; /* Blue color */
+            width: 30px; /* Slightly smaller button */
+            height: 30px;
             border: none;
             border-radius: 50%;
             cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            transition: background-color 0.3s ease, transform 0.2s ease;
+            transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
             z-index: 10;
             padding: 0;
         }
 
         .options-button:hover {
-            background-color: #5a6268;
-            transform: scale(1.05);
+            background-color: rgba(0, 123, 255, 0.1); /* Light blue background on hover */
+            transform: scale(1.1);
         }
 
         .options-button svg {
-            width: 20px;
-            height: 20px;
+            width: 24px; /* Larger icon for clarity */
+            height: 24px;
             fill: currentColor;
+            transition: transform 0.3s ease; /* For icon rotation/change */
+        }
+
+        /* Style for when the options button is active/expanded */
+        .options-button.active svg {
+            transform: rotate(90deg); /* Example: rotate to indicate open */
         }
 
         .code-block {
@@ -142,7 +160,7 @@
             font-family: 'Consolas', 'Monaco', monospace;
             font-size: 14px;
             white-space: pre-wrap;
-            padding-right: 90px;
+            padding-right: 40px; /* Adjusted padding as only copy button here */
             margin: 0;
         }
 
@@ -206,16 +224,21 @@
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/a240211e-de60-4078-8284-715663da996d/1_20250803182522.png" alt="FPS Booster Script Image">
             </div>
-            <h2>Fps Booster</h2>
+            <div class="script-title-container">
+                <h2>Fps Booster</h2>
+                <button class="options-button" title="Info & Updates">
+                    <svg class="ellipsis-icon" viewBox="0 0 24 24">
+                        <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                    <svg class="close-icon" style="display:none;" viewBox="0 0 24 24">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+            </div>
             <div class="code-container">
                 <pre class="code-block">
 loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/Best-Fps-Booster/refs/heads/main/Best%20Fps%20Booster", true))()
                 </pre>
-                <button class="options-button" title="Info & Updates">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                    </svg>
-                </button>
                 <button class="copy-button" title="Copy Code">
                     <svg viewBox="0 0 24 24">
                         <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
@@ -238,16 +261,21 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/Best-Fps
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/e61973cb-200f-4166-a3ce-020aeef2607d/3_20250803195707.png" alt="Unknown Battle Simulator Script Image">
             </div>
-            <h2>Unknown Battle Simulator</h2>
+            <div class="script-title-container">
+                <h2>Unknown Battle Simulator</h2>
+                <button class="options-button" title="Info & Updates">
+                    <svg class="ellipsis-icon" viewBox="0 0 24 24">
+                        <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                    <svg class="close-icon" style="display:none;" viewBox="0 0 24 24">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+            </div>
             <div class="code-container">
                 <pre class="code-block">
 loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/All-special-characters-unlocked/refs/heads/main/All%20special%20characters%20unlocked", true))()
                 </pre>
-                <button class="options-button" title="Info & Updates">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                    </svg>
-                </button>
                 <button class="copy-button" title="Copy Code">
                     <svg viewBox="0 0 24 24">
                         <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
@@ -270,16 +298,21 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/All-spec
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/19c82375-23e2-4e8a-ab63-b5dde0a02f5c/2_20250803194425.png" alt="Anti-Kick Script Image">
             </div>
-            <h2>Anti-Kick</h2>
+            <div class="script-title-container">
+                <h2>Anti-Kick</h2>
+                <button class="options-button" title="Info & Updates">
+                    <svg class="ellipsis-icon" viewBox="0 0 24 24">
+                        <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                    <svg class="close-icon" style="display:none;" viewBox="0 0 24 24">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+            </div>
             <div class="code-container">
                 <pre class="code-block">
 loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANTI-KICK/refs/heads/main/BEST%20ANTI-KICK'))()
                 </pre>
-                <button class="options-button" title="Info & Updates">
-                    <svg viewBox="0 0 24 24">
-                        <path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
-                    </svg>
-                </button>
                 <button class="copy-button" title="Copy Code">
                     <svg viewBox="0 0 24 24">
                         <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
@@ -335,13 +368,25 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
             const optionsButtons = document.querySelectorAll('.options-button');
             optionsButtons.forEach(button => {
                 button.addEventListener('click', (event) => {
-                    const codeContainer = event.target.closest('.code-container');
-                    const infoPanel = codeContainer.querySelector('.info-panel');
+                    const scriptCard = event.target.closest('.script-card');
+                    const infoPanel = scriptCard.querySelector('.info-panel');
+                    const ellipsisIcon = button.querySelector('.ellipsis-icon');
+                    const closeIcon = button.querySelector('.close-icon');
 
+                    // Toggle the info panel
                     infoPanel.classList.toggle('expanded');
+
+                    // Toggle button icons
+                    if (infoPanel.classList.contains('expanded')) {
+                        ellipsisIcon.style.display = 'none';
+                        closeIcon.style.display = 'block';
+                    } else {
+                        ellipsisIcon.style.display = 'block';
+                        closeIcon.style.display = 'none';
+                    }
                 });
             });
         });
     </script>
 </body>
-                </html>
+                        </html>
