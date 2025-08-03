@@ -195,7 +195,6 @@
             max-height: 500px; /* Adjust if content is very long */
             padding: 15px;
             overflow-y: auto; /* Allow vertical scroll if content exceeds max-height */
-            /* Removed overflow: hidden; from here */
         }
 
         .info-panel h3 {
@@ -219,19 +218,15 @@
             padding: 0;
             overflow-x: auto; /* Horizontal scroll for update log */
             padding-bottom: 10px; /* Space for the scrollbar */
-            /* Removed white-space: nowrap; from here */
         }
 
         .info-panel ul li {
-            /* Restored default block behavior for proper height calculation */
-            display: list-item;
-            min-width: auto; /* Removed min-width */
+            display: list-item; /* Restored default block behavior */
             white-space: normal; /* Allow text to wrap naturally */
-            padding-right: 0; /* Removed extra padding */
             margin-bottom: 5px;
         }
 
-        /* Adjustments for nested lists if they need individual horizontal scroll */
+        /* Adjustments for nested lists */
         .info-panel ul ul {
             white-space: normal; /* Allow inner lists to wrap naturally */
             overflow-x: visible; /* Don't force inner lists to scroll horizontally unless explicitly wide */
@@ -244,7 +239,6 @@
             white-space: normal;
             padding-right: 0;
         }
-
 
         footer {
             background-color: #0a1420;
@@ -466,7 +460,9 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
                 const originalIconHTML = button.innerHTML;
 
                 button.addEventListener('click', (event) => {
-                    const codeBlock = event.target.closest('.code-container').querySelector('.code-block');
+                    // Исправлено: теперь ищем codeBlock относительно родительского script-card
+                    const scriptCard = event.target.closest('.script-card');
+                    const codeBlock = scriptCard.querySelector('.code-block');
                     const codeToCopy = codeBlock.textContent.trim();
 
                     navigator.clipboard.writeText(codeToCopy)
@@ -489,5 +485,7 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
             const optionsButtons = document.querySelectorAll('.options-button');
             optionsButtons.forEach(button => {
                 button.addEventListener('click', (event) => {
+                    // Исправлено: теперь ищем infoPanel относительно родительского script-card
                     const scriptCard = event.target.closest('.script-card');
-                    const infoPanel = scriptCard.q
+                    const infoPanel = scriptCard.querySelector('.info-panel');
+                    const ellipsisIcon
