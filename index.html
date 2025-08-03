@@ -18,10 +18,31 @@
             padding: 20px;
             text-align: center;
             border-bottom: 2px solid #1a3a5a;
+            display: flex; /* Make header a flex container */
+            align-items: center; /* Vertically align items */
+            justify-content: center; /* Center horizontally */
+            position: relative; /* For potential absolute positioning later if needed */
         }
 
         h1 {
             color: #ffffff;
+            margin: 0; /* Remove default margin */
+        }
+
+        /* NEW: Style for the profile image in the header */
+        .header-profile-pic {
+            width: 40px; /* Adjust size as needed */
+            height: 40px;
+            border-radius: 50%; /* Make it circular */
+            margin-left: 15px; /* Space from the H1 title */
+            vertical-align: middle; /* Align with text */
+            border: 2px solid #007bff; /* Blue border */
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5); /* Glowing effect */
+            transition: transform 0.2s ease; /* Smooth transition for hover */
+        }
+
+        .header-profile-pic:hover {
+            transform: scale(1.1); /* Slightly enlarge on hover */
         }
 
         main {
@@ -58,23 +79,22 @@
             display: block;
         }
 
-        /* NEW: Container for title and options button */
         .script-title-container {
             display: flex;
             align-items: center;
             justify-content: center;
             padding: 15px;
-            position: relative; /* For absolute positioning of button */
-            background-color: #1a2b40; /* Match card background */
-            margin-bottom: -15px; /* Pull it closer to the code block */
+            position: relative;
+            background-color: #1a2b40;
+            margin-bottom: -15px;
         }
 
         .script-card h2 {
             color: #ffffff;
             margin: 0;
-            text-align: center; /* Still center text */
-            flex-grow: 1; /* Allow title to take available space */
-            padding-right: 40px; /* Make space for the button if it overlaps */
+            text-align: center;
+            flex-grow: 1;
+            padding-right: 40px;
         }
 
         .code-container {
@@ -118,13 +138,12 @@
             fill: currentColor;
         }
 
-        /* NEW: Styling for the options button - moved and styled */
         .options-button {
-            position: absolute; /* Absolute within .script-title-container */
-            right: 15px; /* Position relative to .script-title-container */
-            background-color: transparent; /* Transparent background */
-            color: #007bff; /* Blue color */
-            width: 30px; /* Slightly smaller button */
+            position: absolute;
+            right: 15px;
+            background-color: transparent;
+            color: #007bff;
+            width: 30px;
             height: 30px;
             border: none;
             border-radius: 50%;
@@ -138,20 +157,19 @@
         }
 
         .options-button:hover {
-            background-color: rgba(0, 123, 255, 0.1); /* Light blue background on hover */
+            background-color: rgba(0, 123, 255, 0.1);
             transform: scale(1.1);
         }
 
         .options-button svg {
-            width: 24px; /* Larger icon for clarity */
+            width: 24px;
             height: 24px;
             fill: currentColor;
-            transition: transform 0.3s ease; /* For icon rotation/change */
+            transition: transform 0.3s ease;
         }
 
-        /* Style for when the options button is active/expanded */
         .options-button.active svg {
-            transform: rotate(90deg); /* Example: rotate to indicate open */
+            transform: rotate(90deg);
         }
 
         .code-block {
@@ -160,7 +178,7 @@
             font-family: 'Consolas', 'Monaco', monospace;
             font-size: 14px;
             white-space: pre-wrap;
-            padding-right: 40px; /* Adjusted padding as only copy button here */
+            padding-right: 40px;
             margin: 0;
         }
 
@@ -217,6 +235,9 @@
 <body>
     <header>
         <h1>MEGGD Scripts</h1>
+        <a href="https://scriptblox.com/u/MEGGD" target="_blank" rel="noopener noreferrer">
+            <img src="https://scriptblox.com/images/photo/678da39911443eaf1930cfb3-1754243330765.png" alt="MEGGD ScriptBlox Profile" class="header-profile-pic">
+        </a>
     </header>
 
     <main>
@@ -373,10 +394,8 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
                     const ellipsisIcon = button.querySelector('.ellipsis-icon');
                     const closeIcon = button.querySelector('.close-icon');
 
-                    // Toggle the info panel
                     infoPanel.classList.toggle('expanded');
 
-                    // Toggle button icons
                     if (infoPanel.classList.contains('expanded')) {
                         ellipsisIcon.style.display = 'none';
                         closeIcon.style.display = 'block';
@@ -389,4 +408,4 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
         });
     </script>
 </body>
-                        </html>
+                </html>
