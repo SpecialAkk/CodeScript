@@ -1,350 +1,276 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial=" initial-scale="1.0">
-    <title>Конфиденциальный Доступ</title>
-    <style>
-        /* Общие стили для тела страницы */
-        body {
-            margin: 0;
-            padding: 0;
-            font-family: 'Courier New', Courier, monospace;
-            background-color: #1a1a1a;
-            color: #00ff00;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            min-height: 100vh;
-            overflow-x: hidden; /* Скрываем горизонтальную прокрутку */
-        }
+-- 🔑 Ключ Активации "Inception"
+local CorrectKey = "Inception-Key-123" 
 
-        /* Стили для контейнера сообщения "Доступ Запрещен" */
-        .access-denied-container {
-            text-align: center;
-            padding: 20px;
-            background-color: rgba(0, 0, 0, 0.9); /* Почти полностью непрозрачный черный фон */
-            border: 2px solid #ff0000;
-            box-shadow: 0 0 25px rgba(255, 0, 0, 0.7); /* Более сильное красное свечение */
-            z-index: 2;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            box-sizing: border-box;
-            transition: opacity 0.5s ease; /* Плавное исчезновение */
-        }
+-- // Система Активации
+local Player = game:GetService("Players").LocalPlayer
+local PlayerGui = Player:WaitForChild("PlayerGui")
 
-        .access-denied-container.hidden {
-            opacity: 0;
-            pointer-events: none; /* Отключаем взаимодействие с скрытым элементом */
-        }
+local KeyGUI = Instance.new("ScreenGui", PlayerGui)
+KeyGUI.Name = "KeySystem"
+KeyGUI.ResetOnSpawn = false
+KeyGUI.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
-        .access-denied-container h1 {
-            color: #ff0000;
-            font-size: 2.8em; /* Чуть больше шрифт */
-            margin-bottom: 15px;
-            text-shadow: 0 0 10px rgba(255, 0, 0, 0.9);
-        }
+local MainFrame = Instance.new("Frame", KeyGUI)
+MainFrame.Size = UDim2.new(0, 320, 0, 180)
+MainFrame.Position = UDim2.new(0.5, -160, 0.5, -90)
+MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+MainFrame.BorderColor3 = Color3.fromRGB(80, 120, 255)
+MainFrame.BorderSizePixel = 2
+Instance.new("UICorner", MainFrame).CornerRadius = UDim.new(0, 12)
 
-        .access-denied-container p {
-            font-size: 1.3em;
-            color: #fff;
-            margin-top: 0;
-            margin-bottom: 20px;
-        }
+local Title = Instance.new("TextLabel", MainFrame)
+Title.Size = UDim2.new(1, 0, 0, 40)
+Title.Position = UDim2.new(0, 0, 0, 10)
+Title.BackgroundTransparency = 1
+Title.Text = "ТРЕБУЕТСЯ АКТИВАЦИЯ"
+Title.Font = Enum.Font.GothamBold
+Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+Title.TextSize = 20
 
-        /* Стили для блока с кодом */
-        .code-container {
-            width: 90%;
-            max-width: 900px; /* Чуть шире, чтобы лучше смотрелся код */
-            background-color: #0d0d0d;
-            border: 1px solid #005500;
-            padding: 15px;
-            border-radius: 8px;
-            box-shadow: 0 0 15px rgba(0, 255, 0, 0.5); /* Более сильное зеленое свечение */
-            overflow-x: auto;
-            white-space: pre-wrap;
-            word-wrap: break-word;
-            font-size: 0.85em; /* Чуть меньше шрифт для кода */
-            line-height: 1.5;
-            color: #00ff00;
-            position: relative;
-            opacity: 0; /* Изначально невидимый */
-            pointer-events: none; /* Не реагирует на клики */
-            transition: opacity 0.5s ease; /* Плавное появление */
-            max-height: 90vh; /* Максимальная высота */
-            overflow-y: auto; /* Вертикальная прокрутка */
-        }
+local KeyInput = Instance.new("TextBox", MainFrame)
+KeyInput.Size = UDim2.new(1, -40, 0, 40)
+KeyInput.Position = UDim2.new(0.5, 0, 0, 60)
+KeyInput.AnchorPoint = Vector2.new(0.5, 0)
+KeyInput.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+KeyInput.Font = Enum.Font.Gotham
+KeyInput.Text = ""
+KeyInput.PlaceholderText = "Введите ключ..."
+KeyInput.TextColor3 = Color3.fromRGB(255, 255, 255)
+KeyInput.TextSize = 16
+Instance.new("UICorner", KeyInput).CornerRadius = UDim.new(0, 6)
 
-        .code-container.visible {
-            opacity: 1;
-            pointer-events: auto; /* Включаем взаимодействие */
-        }
+local SubmitButton = Instance.new("TextButton", MainFrame)
+SubmitButton.Size = UDim2.new(1, -40, 0, 40)
+SubmitButton.Position = UDim2.new(0.5, 0, 0, 115)
+SubmitButton.AnchorPoint = Vector2.new(0.5, 0)
+SubmitButton.BackgroundColor3 = Color3.fromRGB(70, 120, 70)
+SubmitButton.Font = Enum.Font.GothamBold
+SubmitButton.Text = "АКТИВИРОВАТЬ"
+SubmitButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+SubmitButton.TextSize = 18
+Instance.new("UICorner", SubmitButton).CornerRadius = UDim.new(0, 8)
 
-        .code-container pre code {
-            display: block;
-        }
-    </style>
-</head>
-<body>
+local StatusLabel = Instance.new("TextLabel", MainFrame)
+StatusLabel.Size = UDim2.new(1, 0, 0, 20)
+StatusLabel.Position = UDim2.new(0, 0, 1, -25)
+StatusLabel.BackgroundTransparency = 1
+StatusLabel.Text = ""
+StatusLabel.Font = Enum.Font.Gotham
+StatusLabel.TextColor3 = Color3.fromRGB(255, 50, 50)
+StatusLabel.TextSize = 14
 
-    <div class="access-denied-container" id="accessDeniedScreen">
-        <h1>ДОСТУП ЗАПРЕЩЕН</h1>
-        <p>Пожалуйста, вернитесь обратно.</p>
-    </div>
+local function MainScript()
+    -- 📌 LocalScript
 
-    <div class="code-container" id="codeContent">
-        <pre><code>
--- 📌 LocalScript
+    -- ⚙️ Сервисы
+    local Players = game:GetService("Players")
+    local TweenService = game:GetService("TweenService")
+    local UserInputService = game:GetService("UserInputService")
+    local player = Players.LocalPlayer
+    local PlayerGui = player:WaitForChild("PlayerGui")
 
--- ⚙️ Сервисы
-local Players = game:GetService("Players")
-local TweenService = game:GetService("TweenService")
-local UserInputService = game:GetService("UserInputService")
-local player = Players.LocalPlayer
-local PlayerGui = player:WaitForChild("PlayerGui")
+    -- 📊 Переменные
+    local resetCount = 0
+    local requiredResets = 30
+    local characterName = "dustdustdust"
+    local running = false
+    local isFirstReset = true
+    local DELAY = 0.2
 
--- 📊 Переменные
-local resetCount = 0
-local requiredResets = 30
-local characterName = "dustdustdust"
-local running = false
-local isFirstReset = true
-local DELAY = 0.2
+    -- 📺 Интерфейс
+    local gui = Instance.new("ScreenGui", PlayerGui)
+    gui.Name = "ResetGui"
+    gui.ResetOnSpawn = false
 
--- 📺 Интерфейс
-local gui = Instance.new("ScreenGui", PlayerGui)
-gui.Name = "ResetGui"
-gui.ResetOnSpawn = false
+    local frame = Instance.new("Frame", gui)
+    frame.Size = UDim2.new(0, 280, 0, 230)
+    frame.Position = UDim2.new(0.5, -140, 0.2, 0)
+    frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
+    frame.BackgroundTransparency = 0.1
+    frame.AnchorPoint = Vector2.new(0.5, 0)
+    frame.Active = true
+    Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
 
-local frame = Instance.new("Frame", gui)
-frame.Size = UDim2.new(0, 280, 0, 230)
-frame.Position = UDim2.new(0.5, -140, 0.2, 0)
-frame.BackgroundColor3 = Color3.fromRGB(30, 30, 35)
-frame.BackgroundTransparency = 0.1
-frame.AnchorPoint = Vector2.new(0.5, 0)
-frame.Active = true
-Instance.new("UICorner", frame).CornerRadius = UDim.new(0, 12)
+    -- 🌈 Тень и анимация
+    local stroke = Instance.new("UIStroke", frame)
+    stroke.Color = Color3.fromRGB(80, 120, 255)
+    stroke.Thickness = 1.2
+    stroke.Transparency = 0.4
 
--- 🌈 Тень и анимация
-local stroke = Instance.new("UIStroke", frame)
-stroke.Color = Color3.fromRGB(80, 120, 255)
-stroke.Thickness = 1.2
-stroke.Transparency = 0.4
+    frame:TweenSize(frame.Size, "Out", "Sine", 0.3, true)
 
-frame:TweenSize(frame.Size, "Out", "Sine", 0.3, true)
+    -- 📱 Перетаскивание (ПК и Мобильные)
+    local dragging = false
+    local dragInput, dragStart, startPos
 
--- 📱 Перетаскивание (ПК и Мобильные)
-local dragging = false
-local dragInput, dragStart, startPos
+    frame.InputBegan:Connect(function(input)
+        if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+            dragging = true
+            dragStart = input.Position
+            startPos = frame.Position
+            input.Changed:Connect(function()
+                if input.UserInputState == Enum.UserInputState.End then
+                    dragging = false
+                end
+            end)
+        end
+    end)
 
-frame.InputBegan:Connect(function(input)
-    if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-        dragging = true
-        dragStart = input.Position
-        startPos = frame.Position
-        input.Changed:Connect(function()
-            if input.UserInputState == Enum.UserInputState.End then
-                dragging = false
+    UserInputService.InputChanged:Connect(function(input)
+        if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
+            local delta = input.Position - dragStart
+            frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
+        end
+    end)
+
+    -- 👤 Поле ввода персонажа
+    local charInput = Instance.new("TextBox", frame)
+    charInput.PlaceholderText = "Имя персонажа"
+    charInput.Text = characterName
+    charInput.Size = UDim2.new(1, -20, 0, 30)
+    charInput.Position = UDim2.new(0, 10, 0, 10)
+    charInput.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+    charInput.TextColor3 = Color3.new(1,1,1)
+    charInput.Font = Enum.Font.Gotham
+    charInput.TextSize = 16
+    charInput.ClearTextOnFocus = false
+    Instance.new("UICorner", charInput).CornerRadius = UDim.new(0, 6)
+
+    -- 🔢 Поле ввода сбросов
+    local resetInput = Instance.new("TextBox", frame)
+    resetInput.PlaceholderText = "Сколько нужно сбросов"
+    resetInput.Text = tostring(requiredResets)
+    resetInput.Size = UDim2.new(1, -20, 0, 30)
+    resetInput.Position = UDim2.new(0, 10, 0, 50)
+    resetInput.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
+    resetInput.TextColor3 = Color3.new(1,1,1)
+    resetInput.Font = Enum.Font.Gotham
+    resetInput.TextSize = 16
+    resetInput.ClearTextOnFocus = false
+    Instance.new("UICorner", resetInput).CornerRadius = UDim.new(0, 6)
+
+    -- 🔘 Кнопка запуска
+    local toggleButton = Instance.new("TextButton", frame)
+    toggleButton.Text = "▶ ВКЛЮЧИТЬ"
+    toggleButton.Size = UDim2.new(1, -20, 0, 40)
+    toggleButton.Position = UDim2.new(0, 10, 0, 90)
+    toggleButton.BackgroundColor3 = Color3.fromRGB(70, 120, 70)
+    toggleButton.TextColor3 = Color3.new(1, 1, 1)
+    toggleButton.Font = Enum.Font.GothamBold
+    toggleButton.TextSize = 18
+    Instance.new("UICorner", toggleButton).CornerRadius = UDim.new(0, 8)
+
+    -- 📊 Метка статуса
+    local statusLabel = Instance.new("TextLabel", frame)
+    statusLabel.Size = UDim2.new(1, -20, 0, 30)
+    statusLabel.Position = UDim2.new(0, 10, 0, 140)
+    statusLabel.BackgroundTransparency = 1
+    statusLabel.TextColor3 = Color3.new(1,1,1)
+    statusLabel.Text = "Сбросов: 0 / " .. requiredResets
+    statusLabel.Font = Enum.Font.Gotham
+    statusLabel.TextSize = 16
+    statusLabel.TextXAlignment = Enum.TextXAlignment.Left
+
+    -- 🌟 Эффект завершения
+    local function flashEffect()
+        local flash = Instance.new("Frame", frame)
+        flash.Size = UDim2.new(1, 0, 1, 0)
+        flash.BackgroundColor3 = Color3.new(1, 1, 1)
+        flash.BackgroundTransparency = 1
+        flash.ZIndex = 10
+        flash.Parent = frame
+
+        local tween = TweenService:Create(flash, TweenInfo.new(0.3), {BackgroundTransparency = 0.7})
+        tween:Play()
+        tween.Completed:Wait()
+        flash:Destroy()
+    end
+
+    -- 🔁 Получение RemoteEvent
+    local function getRemote()
+        return player:WaitForChild("PlayerGui"):WaitForChild("SelectCharacterGui")
+            :WaitForChild("Frame"):WaitForChild("RemoteEvent")
+    end
+
+    -- 📤 Выбор персонажа
+    local function pickCharacter()
+        local success, remote = pcall(getRemote)
+        if success and remote then
+            remote:FireServer(characterName, false)
+        end
+    end
+
+    -- 💀 Сброс
+    local function killCharacter()
+        if player.Character then
+            player.Character:BreakJoints()
+        end
+    end
+
+    -- 🔁 Цикл сбросов
+    local function resetLoop()
+        while running and resetCount < requiredResets do
+            pickCharacter()
+            repeat task.wait() until player.Character
+
+            killCharacter()
+            
+            repeat task.wait() until not player.Character or not player.Character:FindFirstChild("Humanoid")
+            
+            repeat task.wait() until player.Character and player.Character:FindFirstChild("Humanoid")
+            
+            if isFirstReset then
+                resetCount += 1
+                isFirstReset = false
+            else
+                resetCount += 0.5
             end
-        end)
-    end
-end)
 
-UserInputService.InputChanged:Connect(function(input)
-    if dragging and (input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch) then
-        local delta = input.Position - dragStart
-        frame.Position = UDim2.new(startPos.X.Scale, startPos.X.Offset + delta.X, startPos.Y.Scale, startPos.Y.Offset + delta.Y)
-    end
-end)
-
--- 👤 Поле ввода персонажа
-local charInput = Instance.new("TextBox", frame)
-charInput.PlaceholderText = "Имя персонажа"
-charInput.Text = characterName
-charInput.Size = UDim2.new(1, -20, 0, 30)
-charInput.Position = UDim2.new(0, 10, 0, 10)
-charInput.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
-charInput.TextColor3 = Color3.new(1,1,1)
-charInput.Font = Enum.Font.Gotham
-charInput.TextSize = 16
-charInput.ClearTextOnFocus = false
-Instance.new("UICorner", charInput).CornerRadius = UDim.new(0, 6)
-
--- 🔢 Поле ввода сбросов
-local resetInput = Instance.new("TextBox", frame)
-resetInput.PlaceholderText = "Сколько нужно сбросов"
-resetInput.Text = tostring(requiredResets)
-resetInput.Size = UDim2.new(1, -20, 0, 30)
-resetInput.Position = UDim2.new(0, 10, 0, 50)
-resetInput.BackgroundColor3 = Color3.fromRGB(50, 50, 60)
-resetInput.TextColor3 = Color3.new(1,1,1)
-resetInput.Font = Enum.Font.Gotham
-resetInput.TextSize = 16
-resetInput.ClearTextOnFocus = false
-Instance.new("UICorner", resetInput).CornerRadius = UDim.new(0, 6)
-
--- 🔘 Кнопка запуска
-local toggleButton = Instance.new("TextButton", frame)
-toggleButton.Text = "▶ ВКЛЮЧИТЬ"
-toggleButton.Size = UDim2.new(1, -20, 0, 40)
-toggleButton.Position = UDim2.new(0, 10, 0, 90)
-toggleButton.BackgroundColor3 = Color3.fromRGB(70, 120, 70)
-toggleButton.TextColor3 = Color3.new(1, 1, 1)
-toggleButton.Font = Enum.Font.GothamBold
-toggleButton.TextSize = 18
-Instance.new("UICorner", toggleButton).CornerRadius = UDim.new(0, 8)
-
--- 📊 Метка статуса
-local statusLabel = Instance.new("TextLabel", frame)
-statusLabel.Size = UDim2.new(1, -20, 0, 30)
-statusLabel.Position = UDim2.new(0, 10, 0, 140)
-statusLabel.BackgroundTransparency = 1
-statusLabel.TextColor3 = Color3.new(1,1,1)
-statusLabel.Text = "Сбросов: 0 / " .. requiredResets
-statusLabel.Font = Enum.Font.Gotham
-statusLabel.TextSize = 16
-statusLabel.TextXAlignment = Enum.TextXAlignment.Left
-
--- 🌟 Эффект завершения
-local function flashEffect()
-    local flash = Instance.new("Frame", frame)
-    flash.Size = UDim2.new(1, 0, 1, 0)
-    flash.BackgroundColor3 = Color3.new(1, 1, 1)
-    flash.BackgroundTransparency = 1
-    flash.ZIndex = 10
-    flash.Parent = frame
-
-    local tween = TweenService:Create(flash, TweenInfo.new(0.3), {BackgroundTransparency = 0.7})
-    tween:Play()
-    tween.Completed:Wait()
-    flash:Destroy()
-end
-
--- 🔁 Получение RemoteEvent
-local function getRemote()
-    return player:WaitForChild("PlayerGui"):WaitForChild("SelectCharacterGui")
-        :WaitForChild("Frame"):WaitForChild("RemoteEvent")
-end
-
--- 📤 Выбор персонажа
-local function pickCharacter()
-    local success, remote = pcall(getRemote)
-    if success and remote then
-        remote:FireServer(characterName, false)
-    end
-end
-
--- 💀 Сброс
-local function killCharacter()
-    if player.Character then
-        player.Character:BreakJoints()
-    end
-end
-
--- 🔁 Цикл сбросов
-local function resetLoop()
-    while running and resetCount < requiredResets do
-        pickCharacter()
-        repeat task.wait() until player.Character
-
-        killCharacter()
-
-        -- Ждём смерти
-        repeat task.wait() until not player.Character or not player.Character:FindFirstChild("Humanoid")
-
-        -- Ждём возрождения
-        repeat task.wait() until player.Character and player.Character:FindFirstChild("Humanoid")
-
-        -- Засчёт сброса
-        if isFirstReset then
-            resetCount += 1
-            isFirstReset = false
-        else
-            resetCount += 0.5
+            statusLabel.Text = string.format("Сбросов: %.1f / %s", resetCount, tostring(requiredResets))
+            task.wait(DELAY)
         end
 
-        statusLabel.Text = string.format("Сбросов: %.1f / %s", resetCount, tostring(requiredResets))
-        task.wait(DELAY)
+        if resetCount >= requiredResets then
+            toggleButton.Text = "✅ ГОТОВО"
+            toggleButton.BackgroundColor3 = Color3.fromRGB(100, 170, 100)
+            flashEffect()
+            running = false
+        end
     end
 
-    if resetCount >= requiredResets then
-        toggleButton.Text = "✅ ГОТОВО"
-        toggleButton.BackgroundColor3 = Color3.fromRGB(100, 170, 100)
-        flashEffect()
-        running = false
-    end
+    -- ▶ Обработка кнопки
+    toggleButton.MouseButton1Click:Connect(function()
+        if not running then
+            local num = tonumber(resetInput.Text)
+            if num and num > 0 then requiredResets = num end
+
+            local name = charInput.Text
+            if name ~= "" then characterName = name end
+            
+            resetCount = 0
+            isFirstReset = true
+            statusLabel.Text = "Сбросов: 0 / " .. requiredResets
+            toggleButton.Text = "⏸ ОСТАНОВИТЬ"
+            toggleButton.BackgroundColor3 = Color3.fromRGB(170, 60, 60)
+            running = true
+            task.spawn(resetLoop)
+        else
+            running = false
+            toggleButton.Text = "▶ ВКЛЮЧИТЬ"
+            toggleButton.BackgroundColor3 = Color3.fromRGB(70, 120, 70)
+        end
+    end)
 end
 
--- ▶ Обработка кнопки
-toggleButton.MouseButton1Click:Connect(function()
-    if not running then
-        local num = tonumber(resetInput.Text)
-        if num and num > 0 then requiredResets = num end
-
-        local name = charInput.Text
-        if name ~= "" then characterName = name end
-
-        -- Сброс состояния
-        resetCount = 0
-        isFirstReset = true
-        statusLabel.Text = "Сбросов: 0 / " .. requiredResets
-        toggleButton.Text = "⏸ ОСТАНОВИТЬ"
-        toggleButton.BackgroundColor3 = Color3.fromRGB(170, 60, 60)
-        running = true
-        task.spawn(resetLoop)
+SubmitButton.MouseButton1Click:Connect(function()
+    if KeyInput.Text == CorrectKey then
+        KeyGUI:Destroy()
+        MainScript()
     else
-        running = false
-        toggleButton.Text = "▶ ВКЛЮЧИТЬ"
-        toggleButton.BackgroundColor3 = Color3.fromRGB(70, 120, 70)
+        StatusLabel.Text = "НЕВЕРНЫЙ КЛЮЧ"
+        SubmitButton.BackgroundColor3 = Color3.fromRGB(170, 60, 60)
+        task.wait(2)
+        StatusLabel.Text = ""
+        SubmitButton.BackgroundColor3 = Color3.fromRGB(70, 120, 70)
     end
 end)
-        </code></pre>
-    </div>
-
-    <script>
-        // JavaScript начинается здесь
-
-        // Получаем ссылки на элементы HTML по их ID
-        const accessDeniedScreen = document.getElementById('accessDeniedScreen');
-        const codeContent = document.getElementById('codeContent');
-
-        // Задаем правильный email для доступа
-        const CORRECT_EMAIL = "megadmod@gmail.com";
-
-        // Функция для предоставления доступа (скрывает экран запрета и показывает код)
-        function grantAccess() {
-            accessDeniedScreen.classList.add('hidden'); // Добавляем класс, который скрывает экран
-            codeContent.classList.add('visible');     // Добавляем класс, который показывает код
-        }
-
-        // Функция для проверки email из URL
-        function checkEmailFromURL() {
-            // Получаем все параметры из URL (часть после ?)
-            const urlParams = new URLSearchParams(window.location.search);
-            // Получаем значение параметра 'email'
-            const emailParam = urlParams.get('email');
-
-            if (emailParam === CORRECT_EMAIL) {
-                grantAccess();
-            } else {
-                // Если email не совпадает или параметра нет, убедимся, что экран блокировки виден
-                accessDeniedScreen.classList.remove('hidden');
-                codeContent.classList.remove('visible');
-            }
-        }
-
-        // Выполняем проверку email из URL при загрузке страницы
-        document.addEventListener('DOMContentLoaded', checkEmailFromURL);
-
-    </script>
-
-</body>
-</html>
