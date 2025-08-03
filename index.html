@@ -104,7 +104,7 @@
             padding: 15px;
             box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5);
             border: 1px solid #1f3f5a;
-            overflow: visible;
+            /* overflow: visible;  Убран, чтобы избежать перекрытия, если внутри есть проблемы */
         }
 
         .copy-button {
@@ -186,15 +186,15 @@
             border-radius: 5px;
             margin-top: 15px;
             padding: 0 15px;
-            overflow: hidden; /* Keep this for the collapse effect */
+            overflow: hidden; /* Key for collapse animation */
             transition: max-height 0.5s ease-out, padding 0.5s ease-out;
-            max-height: 0;
+            max-height: 0; /* Starts collapsed */
         }
 
         .info-panel.expanded {
-            max-height: 500px; /* Adjust if content is very long */
+            max-height: 500px; /* Needs to be large enough for content */
             padding: 15px;
-            overflow-y: auto; /* Allow vertical scroll if content exceeds max-height */
+            overflow-y: auto; /* Adds vertical scroll if content is too long */
         }
 
         .info-panel h3 {
@@ -216,25 +216,25 @@
             list-style-type: disc;
             margin-left: 20px;
             padding: 0;
-            overflow-x: auto; /* Horizontal scroll for update log */
+            overflow-x: auto; /* Horizontal scroll for content that overflows */
             padding-bottom: 10px; /* Space for the scrollbar */
         }
 
         .info-panel ul li {
-            display: list-item; /* Restored default block behavior */
-            white-space: normal; /* Allow text to wrap naturally */
+            display: list-item; /* Default block behavior for list items */
+            white-space: normal; /* Allows text inside li to wrap */
             margin-bottom: 5px;
         }
 
-        /* Adjustments for nested lists */
+        /* Styles for nested lists */
         .info-panel ul ul {
-            white-space: normal; /* Allow inner lists to wrap naturally */
-            overflow-x: visible; /* Don't force inner lists to scroll horizontally unless explicitly wide */
+            white-space: normal; /* Prevents inner lists from forcing horizontal scroll */
+            overflow-x: visible;
             padding-bottom: 0;
         }
 
         .info-panel ul ul li {
-            display: list-item; /* Restore default list item behavior for nested lists */
+            display: list-item;
             min-width: auto;
             white-space: normal;
             padding-right: 0;
@@ -304,7 +304,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/Best-Fps
                         </li>
                         <li>**Update 3:**
                             <ul>
-                                <li>Added "RenderFidelity" function to optimize complex effects such as "Tessellation"</li>
+                                <li>Added "RenderFidelity" function to optimize complex effects suchs as "Tessellation"</li>
                                 <li>Some functions have been fixed</li>
                                 <li>Added a new way to gradually optimize the game when there are lags</li>
                             </ul>
@@ -454,35 +454,36 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Используем делегирование событий для кнопок, чтобы они работали надежнее
-            // даже если DOM изменяется или кнопки добавляются динамически.
+            // Функция для обработки клика по кнопке копирования
+            function handleCopyButtonClick(event) {
+                const button = event.currentTarget; // event.currentTarget - это элемент, к которому прикреплен слушатель (сама кнопка)
+                const originalIconHTML = button.innerHTML;
 
-            // Для кнопок копирования
-            document.body.addEventListener('click', (event) => {
-                // Проверяем, был ли клик по кнопке с классом 'copy-button'
-                const button = event.target.closest('.copy-button');
-                if (button) {
-                    const originalIconHTML = button.innerHTML; // Сохраняем иконку до изменения
+                // Используем closest для нахождения родительского контейнера для кода
+                const codeContainer = button.closest('.code-container');
+                if (codeContainer) {
+                    const codeBlock = codeContainer.querySelector('.code-block');
+                    if (codeBlock) {
+                        const codeToCopy = codeBlock.textContent.trim();
 
-                    // Ищем ближайший родительский .code-container, затем .code-block внутри него
-                    const codeContainer = button.closest('.code-container');
-                    if (codeContainer) {
-                        const codeBlock = codeContainer.querySelector('.code-block');
-                        if (codeBlock) {
-                            const codeToCopy = codeBlock.textContent.trim();
+                        navigator.clipboard.writeText(codeToCopy)
+                            .then(() => {
+                                console.log('Code copied!');
+                                button.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>'; // Иконка "галочка"
+                                button.style.backgroundColor = '#28a745'; // Зеленый цвет
 
-                            navigator.clipboard.writeText(codeToCopy)
-                                .then(() => {
-                                    console.log('Code copied!');
-                                    button.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>';
-                                    button.style.backgroundColor = '#28a745';
+                                setTimeout(() => {
+                                    button.innerHTML = originalIconHTML; // Возвращаем исходную иконку
+                                    button.style.backgroundColor = '#007bff'; // Возвращаем исходный цвет
+                                }, 2000); // Через 2 секунды
+                            })
+                            .catch(err => {
+                                console.error('Failed to copy code: ', err);
+                                // Можно добавить визуальную индикацию ошибки здесь
+                            });
+                    }
+                }
+            }
 
-                                    setTimeout(() => {
-                                        button.innerHTML = originalIconHTML;
-                                        button.style.backgroundColor = '#007bff';
-                                    }, 2000);
-                                })
-                                .catch(err => {
-                                    console.error('Failed to copy code: ', err);
-                                });
-                
+            // Функция для обработки клика по кнопке опций (троеточие)
+            function hand
