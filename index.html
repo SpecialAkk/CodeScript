@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Самая трудная игра в мире 3.0</title>
+    <title>Самая трудная игра в мире 5.0</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -39,7 +39,17 @@
             transform: translate(-50%, -50%);
             box-shadow: 0 0 15px #00d2ff;
             border-radius: 5px;
-            transition: transform 0.1s;
+            transition: transform 0.1s, opacity 0.1s;
+        }
+
+        .player-blinking {
+            animation: blinker 0.5s linear infinite;
+        }
+
+        @keyframes blinker {
+            50% {
+                opacity: 0.3;
+            }
         }
 
         .enemy {
@@ -61,6 +71,15 @@
             font-size: 28px;
             font-weight: bold;
             color: #238636;
+        }
+
+        #life-display {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 24px;
+            color: #ff004c;
+            z-index: 101;
         }
 
         .screen {
@@ -107,36 +126,40 @@
             margin-bottom: 10px;
         }
 
-        .controls {
-            display: flex;
+        /* Стиль для нового джойстика */
+        #joystick-container {
+            display: none; /* Скрываем на больших экранах */
             position: fixed;
             bottom: 20px;
             left: 50%;
             transform: translateX(-50%);
-            gap: 15px;
-            flex-wrap: wrap;
-            justify-content: center;
-        }
-
-        .controls button {
-            width: 65px;
-            height: 65px;
+            width: 150px;
+            height: 150px;
             border-radius: 50%;
             background-color: rgba(255, 255, 255, 0.1);
-            color: white;
             border: 2px solid rgba(255, 255, 255, 0.3);
-            font-size: 28px;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .controls button:active {
-            background-color: rgba(255, 255, 255, 0.3);
+            z-index: 99;
         }
 
+        #joystick-ball {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.3);
+            transition: transform 0.1s;
+        }
+        
         @media (max-width: 600px) {
             #game-container {
                 width: 90%;
                 height: 90vw;
+            }
+            #joystick-container {
+                display: block; /* Показываем на маленьких экранах */
             }
         }
     </style>
@@ -148,7 +171,7 @@
         <div id="start-screen" class="screen">
             <h2>Начните выживание!</h2>
             <p>Управляйте стрелками или джойстиком. Уворачивайтесь от врагов.</p>
-            <p>Одно касание — и вы проиграли.</p>
+            <p>У вас 3 жизни.</p>
             <button onclick="startGame()">Начать игру</button>
         </div>
 
@@ -159,29 +182,27 @@
             <button onclick="resetGame()">Попробовать ещё раз</button>
         </div>
 
+        <div id="life-display"></div>
         <div id="player"></div>
         </div>
     <div id="score-display">Выживание: 0 сек</div>
 
-    <div class="controls">
-        <button id="up-btn">↑</button>
-        <button id="left-btn">←</button>
-        <button id="right-btn">→</button>
-        <button id="down-btn">↓</button>
+    <div id="joystick-container">
+        <div id="joystick-ball"></div>
     </div>
 
     <script>
         const gameContainer = document.getElementById('game-container');
         const player = document.getElementById('player');
         const scoreDisplay = document.getElementById('score-display');
+        const lifeDisplay = document.getElementById('life-display');
         const startScreen = document.getElementById('start-screen');
         const gameOverScreen = document.getElementById('game-over-screen');
         const finalScore = document.getElementById('final-score');
-        const upBtn = document.getElementById('up-btn');
-        const downBtn = document.getElementById('down-btn');
-        const leftBtn = document.getElementById('left-btn');
-        const rightBtn = document.getElementById('right-btn');
-
+        
+        const joystickContainer = document.getElementById('joystick-container');
+        const joystickBall = document.getElementById('joystick-ball');
+        
         let playerX = 250;
         let playerY = 250;
         const playerSpeed = 3;
@@ -190,24 +211,24 @@
         let gameLoopInterval;
         let enemySpawnInterval;
         let score = 0;
-        let moveInterval;
+        let lives = 3;
+        let isInvincible = false;
 
-        // Новые переменные для непрерывного движения
         let moveDirection = { x: 0, y: 0 };
-        let isMoving = false;
+        let moveInterval;
 
         function getRandomInt(max) {
             return Math.floor(Math.random() * max);
         }
 
-        // Обновление позиции игрока
+        // --- Основные функции игры ---
+
         function updatePlayerPosition() {
             if (isGameOver) return;
             
             playerX += moveDirection.x * playerSpeed;
             playerY += moveDirection.y * playerSpeed;
 
-            // Проверка границ
             if (playerX < 0) playerX = 0;
             if (playerX > gameContainer.offsetWidth - player.offsetWidth) playerX = gameContainer.offsetWidth - player.offsetWidth;
             if (playerY < 0) playerY = 0;
@@ -217,40 +238,41 @@
             player.style.top = `${playerY}px`;
         }
 
-        // Создание врагов
         function createEnemy() {
             const enemy = document.createElement('div');
             enemy.className = 'enemy';
-            const side = getRandomInt(4);
             
             let enemyX, enemyY, speedX, speedY;
 
-            switch (side) {
-                case 0: // Top
+            const playerCenterX = playerX + player.offsetWidth / 2;
+            const playerCenterY = playerY + player.offsetHeight / 2;
+            const minDistance = 150;
+
+            let side;
+            do {
+                side = getRandomInt(4);
+                if (side === 0) { // Top
                     enemyX = getRandomInt(gameContainer.offsetWidth);
                     enemyY = -20;
-                    speedX = getRandomInt(3) - 1; // -1, 0, 1
+                    speedX = getRandomInt(3) - 1;
                     speedY = getRandomInt(3) + 2;
-                    break;
-                case 1: // Right
+                } else if (side === 1) { // Right
                     enemyX = gameContainer.offsetWidth + 20;
                     enemyY = getRandomInt(gameContainer.offsetHeight);
                     speedX = -(getRandomInt(3) + 2);
                     speedY = getRandomInt(3) - 1;
-                    break;
-                case 2: // Bottom
+                } else if (side === 2) { // Bottom
                     enemyX = getRandomInt(gameContainer.offsetWidth);
                     enemyY = gameContainer.offsetHeight + 20;
                     speedX = getRandomInt(3) - 1;
                     speedY = -(getRandomInt(3) + 2);
-                    break;
-                case 3: // Left
+                } else { // Left
                     enemyX = -20;
                     enemyY = getRandomInt(gameContainer.offsetHeight);
                     speedX = getRandomInt(3) + 2;
                     speedY = getRandomInt(3) - 1;
-                    break;
-            }
+                }
+            } while (Math.sqrt(Math.pow(enemyX - playerCenterX, 2) + Math.pow(enemyY - playerCenterY, 2)) < minDistance);
 
             enemy.style.left = `${enemyX}px`;
             enemy.style.top = `${enemyY}px`;
@@ -261,7 +283,6 @@
         function updateGame() {
             if (isGameOver) return;
 
-            // Обновление врагов
             enemies.forEach(enemy => {
                 enemy.x += enemy.speedX;
                 enemy.y += enemy.speedY;
@@ -271,7 +292,6 @@
 
             checkCollision();
 
-            // Удаление врагов, вышедших за пределы экрана
             enemies = enemies.filter(enemy => {
                 const rect = enemy.element.getBoundingClientRect();
                 return rect.right > -10 && rect.left < gameContainer.offsetWidth + 10 && rect.bottom > -10 && rect.top < gameContainer.offsetHeight + 10;
@@ -283,6 +303,8 @@
         }
 
         function checkCollision() {
+            if (isInvincible) return;
+
             const playerRect = player.getBoundingClientRect();
             enemies.forEach(enemy => {
                 const enemyRect = enemy.element.getBoundingClientRect();
@@ -292,18 +314,38 @@
                     playerRect.top < enemyRect.bottom &&
                     playerRect.bottom > enemyRect.top
                 ) {
-                    endGame();
+                    loseLife();
                 }
             });
         }
         
+        function loseLife() {
+            lives--;
+            lifeDisplay.textContent = `Жизни: ${lives}`;
+            
+            if (lives <= 0) {
+                endGame();
+            } else {
+                isInvincible = true;
+                player.classList.add('player-blinking');
+                setTimeout(() => {
+                    isInvincible = false;
+                    player.classList.remove('player-blinking');
+                }, 2000);
+            }
+        }
+
         function startGame() {
             isGameOver = false;
+            isInvincible = false;
+            lives = 3;
             startScreen.classList.add('hidden');
             gameOverScreen.classList.add('hidden');
             player.style.display = 'block';
-            playerX = gameContainer.offsetWidth / 2;
-            playerY = gameContainer.offsetHeight / 2;
+            lifeDisplay.style.display = 'block';
+            lifeDisplay.textContent = `Жизни: ${lives}`;
+            playerX = gameContainer.offsetWidth / 2 - player.offsetWidth / 2;
+            playerY = gameContainer.offsetHeight / 2 - player.offsetHeight / 2;
             updatePlayerPosition();
 
             score = 0;
@@ -326,6 +368,10 @@
                     enemySpawnInterval = setInterval(createEnemy, spawnRate);
                 }
             }, spawnRate);
+
+            if (window.innerWidth <= 600) {
+                joystickContainer.style.display = 'block';
+            }
         }
 
         function endGame() {
@@ -337,6 +383,8 @@
             finalScore.textContent = `${score} сек`;
             gameOverScreen.classList.remove('hidden');
             player.style.display = 'none';
+            lifeDisplay.style.display = 'none';
+            joystickContainer.style.display = 'none';
             enemies.forEach(enemy => enemy.element.remove());
             enemies = [];
         }
@@ -346,59 +394,99 @@
             startScreen.classList.remove('hidden');
         }
 
-        // --- Новая логика непрерывного движения ---
+        // --- Логика шарикового джойстика ---
 
-        // Управление с клавиатуры
-        document.addEventListener('keydown', (e) => {
-            if (isGameOver || isMoving) return;
-            isMoving = true;
-            
-            switch (e.key) {
-                case 'ArrowUp': moveDirection.y = -1; break;
-                case 'ArrowDown': moveDirection.y = 1; break;
-                case 'ArrowLeft': moveDirection.x = -1; break;
-                case 'ArrowRight': moveDirection.x = 1; break;
-            }
-            if (moveDirection.x !== 0 || moveDirection.y !== 0) {
-                moveInterval = setInterval(updatePlayerPosition, 16);
+        let isJoystickActive = false;
+        let joystickCenter = { x: 0, y: 0 };
+        const joystickRadius = 75;
+
+        joystickContainer.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            isJoystickActive = true;
+            const rect = joystickContainer.getBoundingClientRect();
+            joystickCenter = {
+                x: rect.left + rect.width / 2,
+                y: rect.top + rect.height / 2
+            };
+            handleJoystickMove(e.touches[0]);
+        });
+
+        joystickContainer.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            if (isJoystickActive) {
+                handleJoystickMove(e.touches[0]);
             }
         });
-        document.addEventListener('keyup', (e) => {
-            isMoving = false;
-            switch (e.key) {
-                case 'ArrowUp':
-                case 'ArrowDown': moveDirection.y = 0; break;
-                case 'ArrowLeft':
-                case 'ArrowRight': moveDirection.x = 0; break;
-            }
-            if (moveDirection.x === 0 && moveDirection.y === 0) {
+
+        joystickContainer.addEventListener('touchend', (e) => {
+            if (isJoystickActive) {
+                isJoystickActive = false;
+                joystickBall.style.transform = `translate(-50%, -50%)`;
+                moveDirection = { x: 0, y: 0 };
                 clearInterval(moveInterval);
             }
         });
 
-        // Управление с тачскрина
-        function startMoving(x, y) {
-            if (isGameOver || isMoving) return;
-            isMoving = true;
+        function handleJoystickMove(touch) {
+            const touchX = touch.clientX;
+            const touchY = touch.clientY;
+
+            let deltaX = touchX - joystickCenter.x;
+            let deltaY = touchY - joystickCenter.y;
+            const distance = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
+
+            // Ограничиваем движение шарика внутри джойстика
+            if (distance > joystickRadius) {
+                deltaX *= joystickRadius / distance;
+                deltaY *= joystickRadius / distance;
+            }
+
+            joystickBall.style.transform = `translate(${deltaX - 30}px, ${deltaY - 30}px)`;
+
+            // Обновляем направление движения игрока
+            moveDirection = {
+                x: deltaX / joystickRadius,
+                y: deltaY / joystickRadius
+            };
+            
+            // Запускаем движение, если ещё не запущено
+            if (!moveInterval) {
+                moveInterval = setInterval(updatePlayerPosition, 16);
+            }
+        }
+        
+        // --- Управление с клавиатуры (оставлено для ПК) ---
+        document.addEventListener('keydown', (e) => {
+            if (isGameOver || e.repeat) return;
+            let x = 0, y = 0;
+            switch (e.key) {
+                case 'ArrowUp': y = -1; break;
+                case 'ArrowDown': y = 1; break;
+                case 'ArrowLeft': x = -1; break;
+                case 'ArrowRight': x = 1; break;
+            }
+            if (x !== 0 || y !== 0) {
+                moveDirection.x = x;
+                moveDirection.y = y;
+                clearInterval(moveInterval);
+                moveInterval = setInterval(updatePlayerPosition, 16);
+            }
+        });
+        document.addEventListener('keyup', (e) => {
+            let x = moveDirection.x, y = moveDirection.y;
+            switch (e.key) {
+                case 'ArrowUp':
+                case 'ArrowDown': y = 0; break;
+                case 'ArrowLeft':
+                case 'ArrowRight': x = 0; break;
+            }
+            if (x === 0 && y === 0) {
+                clearInterval(moveInterval);
+                moveInterval = null;
+            }
             moveDirection.x = x;
             moveDirection.y = y;
-            moveInterval = setInterval(updatePlayerPosition, 16);
-        }
-        function stopMoving() {
-            clearInterval(moveInterval);
-            moveDirection.x = 0;
-            moveDirection.y = 0;
-            isMoving = false;
-        }
-
-        upBtn.addEventListener('touchstart', () => startMoving(0, -1));
-        upBtn.addEventListener('touchend', stopMoving);
-        downBtn.addEventListener('touchstart', () => startMoving(0, 1));
-        downBtn.addEventListener('touchend', stopMoving);
-        leftBtn.addEventListener('touchstart', () => startMoving(-1, 0));
-        leftBtn.addEventListener('touchend', stopMoving);
-        rightBtn.addEventListener('touchstart', () => startMoving(1, 0));
-        rightBtn.addEventListener('touchend', stopMoving);
+        });
     </script>
 </body>
 </html>
