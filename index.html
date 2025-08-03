@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Поисковик с историей</title>
+    <title>Поисковик с подсказками</title>
     <style>
         :root {
             --primary-color: #007bff;
@@ -41,7 +41,7 @@
         .search-form {
             display: flex;
             gap: 10px;
-            margin-bottom: 2rem;
+            margin-bottom: 1rem;
         }
         .search-form input {
             flex-grow: 1;
@@ -70,6 +70,32 @@
             background-color: var(--primary-hover-color);
             transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        .suggestions-container {
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 2rem;
+            text-align: left;
+            display: none; /* Сначала скрываем */
+        }
+        .suggestions-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .suggestions-list li {
+            padding: 10px 15px;
+            border-bottom: 1px solid #eee;
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+        }
+        .suggestions-list li:hover {
+            background-color: #f0f2f5;
+        }
+        .suggestions-list li a {
+            text-decoration: none;
+            color: var(--primary-color);
         }
         .result-container {
             margin-top: 1.5rem;
@@ -119,10 +145,14 @@
     <div class="container">
         <h1>Свой Поисковик</h1>
         
-        <form id="url-form" class="search-form" onsubmit="searchWebsite(event)">
-            <input type="text" id="url-input" placeholder="Введите URL-адрес, например, google.com">
-            <button type="submit">Найти</button>
+        <form id="url-form" class="search-form">
+            <input type="text" id="url-input" placeholder="Введите URL-адрес, например, google.com" oninput="showSuggestions()">
+            <button type="submit" onclick="searchWebsite(event)">Найти</button>
         </form>
+
+        <div class="suggestions-container" id="suggestions">
+            <ul class="suggestions-list" id="suggestions-list"></ul>
+        </div>
 
         <div id="result" class="result-container">
             </div>
@@ -135,6 +165,44 @@
     </div>
 
     <script>
+        const allSites = [
+            "google.com",
+            "youtube.com",
+            "roblox.com",
+            "roblox.com/games",
+            "yandex.ru",
+            "vk.com",
+            "wikipedia.org",
+            "github.com",
+            "stackoverflow.com"
+        ];
+
+        function showSuggestions() {
+            const searchTerm = document.getElementById('url-input').value.toLowerCase();
+            const suggestionsContainer = document.getElementById('suggestions');
+            const suggestionsList = document.getElementById('suggestions-list');
+            
+            suggestionsList.innerHTML = '';
+            
+            if (searchTerm.length === 0) {
+                suggestionsContainer.style.display = 'none';
+                return;
+            }
+
+            const matchedSites = allSites.filter(site => site.includes(searchTerm));
+            
+            if (matchedSites.length > 0) {
+                matchedSites.forEach(site => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<a href="http://${site}" target="_blank">${site}</a>`;
+                    suggestionsList.appendChild(li);
+                });
+                suggestionsContainer.style.display = 'block';
+            } else {
+                suggestionsContainer.style.display = 'none';
+            }
+        }
+
         function searchWebsite(event) {
             event.preventDefault();
 
@@ -154,13 +222,11 @@
 
             const linkHtml = `<a href="${fullUrl}" target="_blank">${fullUrl}</a>`;
             
-            // Обновляем текущий результат
             resultDiv.innerHTML = linkHtml;
 
-            // Добавляем новую ссылку в историю
             const newHistoryItem = document.createElement('li');
             newHistoryItem.innerHTML = `<a href="${fullUrl}" target="_blank">${fullUrl}</a>`;
-            historyList.prepend(newHistoryItem); // Добавляем в начало списка
+            historyList.prepend(newHistoryItem);
         }
     </script>
 
