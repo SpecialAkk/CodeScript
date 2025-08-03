@@ -1,11 +1,214 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Hello World</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My Delta Exploit Scripts Website</title>
+    <style>
+        /* style.css - integrated */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #0d1a2e; /* Dark blue background */
+            color: #e0e0e0; /* Light text */
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: #0a1420; /* Even darker for header */
+            padding: 20px;
+            text-align: center;
+            border-bottom: 2px solid #1a3a5a;
+        }
+
+        h1 {
+            color: #ffffff;
+        }
+
+        main {
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Responsive grid */
+            gap: 30px;
+        }
+
+        .script-card {
+            background-color: #1a2b40; /* Slightly lighter dark blue for cards */
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .script-image {
+            width: 100%;
+            height: 200px; /* Image height */
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            filter: brightness(0.7); /* Slightly darken the image */
+        }
+
+        .script-card h2 {
+            color: #ffffff;
+            padding: 15px;
+            margin: 0;
+            text-align: center;
+        }
+
+        /* Style for code container */
+        .code-container {
+            position: relative; /* For button positioning */
+            background-color: #0a1420; /* Background for code container */
+            border-radius: 5px;
+            margin: 0 15px 15px;
+            padding: 15px;
+            box-shadow: inset 0 0 10px rgba(0, 0, 0, 0.5); /* Inner shadow for effect */
+            border: 1px solid #1f3f5a; /* Thin border */
+        }
+
+        .code-block {
+            color: #4a90e2; /* Blue color for code text */
+            overflow-x: auto; /* For horizontal scrolling if code is long */
+            font-family: 'Consolas', 'Monaco', monospace;
+            font-size: 14px;
+            white-space: pre-wrap; /* Wrap long lines */
+            padding-right: 40px; /* Offset for icon button */
+            margin: 0; /* Remove default <pre> margins */
+        }
+
+        .copy-button {
+            position: absolute; /* Absolute positioning for the button */
+            top: 10px; /* Top offset */
+            right: 10px; /* Right offset */
+            background-color: #007bff; /* Bright blue button */
+            color: white; /* Icon color */
+            width: 34px; /* Button width */
+            height: 34px; /* Button height */
+            border: none;
+            border-radius: 50%; /* Make button circular */
+            cursor: pointer;
+            display: flex; /* For SVG centering */
+            align-items: center; /* Vertical centering */
+            justify-content: center; /* Horizontal centering */
+            transition: background-color 0.3s ease, transform 0.2s ease; /* Add transform animation */
+            z-index: 10; /* Ensure button is above code */
+            padding: 0; /* Remove inner padding */
+        }
+
+        .copy-button:hover {
+            background-color: #0056b3; /* Darker on hover */
+            transform: scale(1.05); /* Slightly enlarge on hover */
+        }
+
+        .copy-button svg {
+            width: 20px; /* Icon size */
+            height: 20px; /* Icon size */
+            fill: currentColor; /* Icon inherits button color */
+        }
+
+        footer {
+            background-color: #0a1420;
+            color: #a0a0a0;
+            text-align: center;
+            padding: 15px;
+            margin-top: 30px;
+            border-top: 2px solid #1a3a5a;
+        }
+    </style>
 </head>
 <body>
+    <header>
+        <h1>Our Delta Exploit Scripts</h1>
+    </header>
+
+    <main>
+        <section class="script-card">
+            <div class="script-image" style="background-image: url('images/aim_wallpaper.jpg');"></div>
+            <h2>Aim Script</h2>
+            <div class="code-container">
+                <pre class="code-block">
+                    
+                 local Players = game:GetService("Players")
+                 local LocalPlayer = Players.LocalPlayer
+                 print("Aim script loaded!")
+                </pre>
+                <button class="copy-button" title="Copy Code">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <section class="script-card">
+            <div class="script-image" style="background-image: url('images/dex_wallpaper.jpg');"></div>
+            <h2>Dex Explorer Script</h2>
+            <div class="code-container">
+                <pre class="code-block">
+
+                    loadstring(game:HttpGet("https://raw.githubusercontent.com/script/dex.lua"))()
+                </pre>
+                <button class="copy-button" title="Copy Code">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        <section class="script-card">
+            <div class="script-image" style="background-image: url('images/anti_kick_wallpaper.jpg');"></div>
+            <h2>Anti-Kick Script</h2>
+            <div class="code-container">
+                <pre class="code-block">
+                
+                game:GetService("Players").LocalPlayer.PlayerRemoving:Connect(function() wait(9e9) end)
+                </pre>
+                <button class="copy-button" title="Copy Code">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                    </svg>
+                </button>
+            </div>
+        </section>
+
+        </main>
+
+    <footer>
+        <p>&copy; 2025 Our Scripts</p>
+    </footer>
+
     <script>
-        print("Hello World")
+        // script.js - integrated
+        document.addEventListener('DOMContentLoaded', () => {
+            const copyButtons = document.querySelectorAll('.copy-button');
+
+            copyButtons.forEach(button => {
+                const originalIconHTML = button.innerHTML; // Save the original icon
+
+                button.addEventListener('click', (event) => {
+                    const codeBlock = event.target.closest('.code-container').querySelector('.code-block');
+                    const codeToCopy = codeBlock.textContent;
+
+                    navigator.clipboard.writeText(codeToCopy)
+                        .then(() => {
+                            console.log('Code copied!');
+                            button.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>'; // Checkmark icon
+                            button.style.backgroundColor = '#28a745'; // Green color for confirmation
+
+                            setTimeout(() => {
+                                button.innerHTML = originalIconHTML; // Revert to original icon
+                                button.style.backgroundColor = '#007bff'; // Revert to original color
+                            }, 2000);
+                        })
+                        .catch(err => {
+                            console.error('Failed to copy code: ', err);
+                        });
+                });
+            });
+        });
     </script>
 </body>
-</html>
+    </html>
