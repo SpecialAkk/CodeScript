@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Продвинутый Поисковик</title>
+    <title>Поисковик с историей</title>
     <style>
         :root {
             --primary-color: #007bff;
@@ -89,6 +89,29 @@
             color: var(--primary-hover-color);
             text-decoration: underline;
         }
+        .history-container {
+            margin-top: 2rem;
+            text-align: left;
+        }
+        .history-container h2 {
+            font-size: 1.5rem;
+            color: var(--text-color);
+            margin-bottom: 1rem;
+        }
+        .history-list {
+            list-style: none;
+            padding: 0;
+            background-color: var(--card-bg-color);
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+        }
+        .history-list li {
+            padding: 12px 20px;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .history-list li:last-child {
+            border-bottom: none;
+        }
     </style>
 </head>
 <body>
@@ -103,6 +126,12 @@
 
         <div id="result" class="result-container">
             </div>
+
+        <div class="history-container">
+            <h2>История поиска:</h2>
+            <ul id="history-list" class="history-list">
+                </ul>
+        </div>
     </div>
 
     <script>
@@ -111,6 +140,7 @@
 
             const urlInput = document.getElementById('url-input').value;
             const resultDiv = document.getElementById('result');
+            const historyList = document.getElementById('history-list');
 
             if (urlInput.trim() === '') {
                 resultDiv.innerHTML = 'Введите адрес, чтобы увидеть результат.';
@@ -124,7 +154,13 @@
 
             const linkHtml = `<a href="${fullUrl}" target="_blank">${fullUrl}</a>`;
             
+            // Обновляем текущий результат
             resultDiv.innerHTML = linkHtml;
+
+            // Добавляем новую ссылку в историю
+            const newHistoryItem = document.createElement('li');
+            newHistoryItem.innerHTML = `<a href="${fullUrl}" target="_blank">${fullUrl}</a>`;
+            historyList.prepend(newHistoryItem); // Добавляем в начало списка
         }
     </script>
 
