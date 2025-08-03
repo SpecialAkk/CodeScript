@@ -186,7 +186,7 @@
             border-radius: 5px;
             margin-top: 15px;
             padding: 0 15px;
-            overflow: hidden; /* This is for the expand/collapse animation */
+            overflow: hidden; /* Keep this for the collapse effect */
             transition: max-height 0.5s ease-out, padding 0.5s ease-out;
             max-height: 0;
         }
@@ -194,7 +194,8 @@
         .info-panel.expanded {
             max-height: 500px; /* Adjust if content is very long */
             padding: 15px;
-            overflow-y: auto; /* Added vertical scroll for info panel itself if needed */
+            overflow-y: auto; /* Allow vertical scroll if content exceeds max-height */
+            /* Removed overflow: hidden; from here */
         }
 
         .info-panel h3 {
@@ -216,19 +217,18 @@
             list-style-type: disc;
             margin-left: 20px;
             padding: 0;
-            /* Force horizontal scrolling */
-            overflow-x: auto;
-            white-space: nowrap; /* Keep content on a single line */
+            overflow-x: auto; /* Horizontal scroll for update log */
             padding-bottom: 10px; /* Space for the scrollbar */
+            /* Removed white-space: nowrap; from here */
         }
 
         .info-panel ul li {
-            display: inline-block; /* Treat list items as inline blocks to allow horizontal flow */
-            min-width: 100%; /* Make each list item at least 100% of the panel width to ensure scrolling for long content */
-            white-space: normal; /* Allow text inside the li to wrap vertically if it's too long, but keep the li in a horizontal flow */
-            vertical-align: top; /* Align list items to the top if they are different heights */
+            /* Restored default block behavior for proper height calculation */
+            display: list-item;
+            min-width: auto; /* Removed min-width */
+            white-space: normal; /* Allow text to wrap naturally */
+            padding-right: 0; /* Removed extra padding */
             margin-bottom: 5px;
-            padding-right: 20px; /* Extra space between items if they were to wrap, helps with scroll */
         }
 
         /* Adjustments for nested lists if they need individual horizontal scroll */
@@ -486,4 +486,8 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
                 });
             });
 
-            const optionsButtons = document.querySelectorAll('.option
+            const optionsButtons = document.querySelectorAll('.options-button');
+            optionsButtons.forEach(button => {
+                button.addEventListener('click', (event) => {
+                    const scriptCard = event.target.closest('.script-card');
+                    const infoPanel = scriptCard.q
