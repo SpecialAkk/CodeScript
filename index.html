@@ -192,7 +192,7 @@
         }
 
         .info-panel.expanded {
-            max-height: 500px; /* Adjust if content is very long */
+            max-height: 500px;
             padding: 15px;
         }
 
@@ -208,15 +208,20 @@
             font-size: 0.9em;
             line-height: 1.6;
             color: #c0c0c0;
-            margin-bottom: 10px; /* Adjusted for list items too */
+            margin-bottom: 10px;
         }
+
         .info-panel ul {
             list-style-type: disc;
             margin-left: 20px;
             padding: 0;
+            /* NEW: Horizontal scrolling for the update log */
+            overflow-x: auto;
+            padding-bottom: 10px; /* Add padding for scrollbar visibility */
         }
         .info-panel ul li {
             margin-bottom: 5px;
+            white-space: normal; /* Allow text to wrap within each list item */
         }
 
 
@@ -348,7 +353,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/Best-Fps
                             </ul>
                         </li>
                     </ul>
-                    </div>
+                </div>
             </div>
         </section>
 
@@ -482,4 +487,4 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
         });
     </script>
 </body>
-    </html>
+                                </html>
