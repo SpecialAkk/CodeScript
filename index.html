@@ -1,80 +1,114 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Игра: Сборщик предметов 2.2</title>
+    <title>Самая трудная игра в мире 3.0</title>
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            background: #0d1117;
             display: flex;
             justify-content: center;
             align-items: center;
             flex-direction: column;
             height: 100vh;
             margin: 0;
-            color: #333;
+            color: #c9d1d9;
             overflow: hidden;
-        }
-
-        h1 {
-            color: #4a4a4a;
-            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            text-align: center;
         }
 
         #game-container {
             width: 500px;
-            height: 400px;
-            border: 5px solid #4a90e2;
-            border-radius: 15px;
-            background-color: #f8f9fa;
+            height: 500px;
+            border: 2px solid #238636;
+            background-color: #010409;
             position: relative;
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            box-shadow: 0 0 30px rgba(35, 134, 54, 0.5);
             overflow: hidden;
             touch-action: none;
+            border-radius: 10px;
         }
 
         #player {
-            width: 30px;
-            height: 30px;
-            background-color: #ff6f61;
-            border-radius: 8px;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            box-shadow: 0 0 15px #ff6f61;
-            transition: background-color 0.2s, box-shadow 0.2s;
-        }
-        
-        .player-boosted {
-            background-color: #5cb85c !important;
-            box-shadow: 0 0 20px #5cb85c, 0 0 5px #5cb85c;
-        }
-
-        .item {
             width: 25px;
             height: 25px;
-            background-color: #6a11cb;
-            border-radius: 50%;
+            background: linear-gradient(45deg, #58a6ff, #00d2ff);
             position: absolute;
-            box-shadow: 0 0 10px #6a11cb;
-            transition: transform 0.3s ease-out;
+            top: 250px;
+            left: 250px;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px #00d2ff;
+            border-radius: 5px;
+            transition: transform 0.1s;
         }
 
-        .special-item {
-            background-color: #f7b731;
-            box-shadow: 0 0 15px #f7b731;
+        .enemy {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(45deg, #ff004c, #ff6699);
+            position: absolute;
+            box-shadow: 0 0 10px #ff004c;
+            border-radius: 50%;
         }
 
+        h1 {
+            color: #238636;
+            text-shadow: 2px 2px 5px rgba(0,0,0,0.5);
+        }
+        
         #score-display {
             margin-top: 20px;
             font-size: 28px;
             font-weight: bold;
-            color: #4a4a4a;
+            color: #238636;
+        }
+
+        .screen {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(13, 17, 23, 0.95);
+            color: white;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        #start-screen h2, #game-over-screen h2 {
+            font-size: 32px;
+            color: #58a6ff;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.5);
+        }
+
+        #start-screen button, #game-over-screen button {
+            padding: 15px 30px;
+            font-size: 18px;
+            font-family: inherit;
+            background-color: #ff004c;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 20px;
+            border-radius: 8px;
+        }
+
+        #start-screen button:hover, #game-over-screen button:hover {
+            background-color: #e60045;
+        }
+
+        #final-score {
+            font-size: 40px;
+            color: #58a6ff;
+            margin-bottom: 10px;
         }
 
         .controls {
-            display: flex; 
+            display: flex;
             position: fixed;
             bottom: 20px;
             left: 50%;
@@ -85,198 +119,286 @@
         }
 
         .controls button {
-            width: 60px;
-            height: 60px;
+            width: 65px;
+            height: 65px;
             border-radius: 50%;
-            background-color: rgba(0, 0, 0, 0.5);
+            background-color: rgba(255, 255, 255, 0.1);
             color: white;
-            border: none;
-            font-size: 24px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            font-size: 28px;
             cursor: pointer;
             transition: background-color 0.2s;
         }
         .controls button:active {
-            background-color: rgba(0, 0, 0, 0.8);
+            background-color: rgba(255, 255, 255, 0.3);
         }
 
-        /* Стиль для кнопки ускорения */
-        #speed-btn {
-            background-color: #f0ad4e;
-            color: white;
-        }
-        #speed-btn:active {
-            background-color: #ec971f;
-        }
-        
         @media (max-width: 600px) {
             #game-container {
-                width: 95%;
-                height: 300px;
+                width: 90%;
+                height: 90vw;
             }
         }
     </style>
 </head>
 <body>
 
-    <h1>Сборщик предметов 2.2</h1>
+    <h1>Самая трудная игра</h1>
     <div id="game-container">
+        <div id="start-screen" class="screen">
+            <h2>Начните выживание!</h2>
+            <p>Управляйте стрелками или джойстиком. Уворачивайтесь от врагов.</p>
+            <p>Одно касание — и вы проиграли.</p>
+            <button onclick="startGame()">Начать игру</button>
+        </div>
+
+        <div id="game-over-screen" class="screen hidden">
+            <h2>Игра окончена!</h2>
+            <p>Ваше время выживания:</p>
+            <div id="final-score">0</div>
+            <button onclick="resetGame()">Попробовать ещё раз</button>
+        </div>
+
         <div id="player"></div>
         </div>
-    <div id="score-display">Счёт: 0</div>
-    
+    <div id="score-display">Выживание: 0 сек</div>
+
     <div class="controls">
         <button id="up-btn">↑</button>
         <button id="left-btn">←</button>
         <button id="right-btn">→</button>
         <button id="down-btn">↓</button>
-        <button id="speed-btn">⚡️</button>
     </div>
 
     <script>
         const gameContainer = document.getElementById('game-container');
         const player = document.getElementById('player');
         const scoreDisplay = document.getElementById('score-display');
+        const startScreen = document.getElementById('start-screen');
+        const gameOverScreen = document.getElementById('game-over-screen');
+        const finalScore = document.getElementById('final-score');
         const upBtn = document.getElementById('up-btn');
         const downBtn = document.getElementById('down-btn');
         const leftBtn = document.getElementById('left-btn');
         const rightBtn = document.getElementById('right-btn');
-        const speedBtn = document.getElementById('speed-btn');
 
-        let score = 0;
         let playerX = 250;
-        let playerY = 200;
-        let playerSpeed = 5; // Базовая скорость
-        let isBoosted = false;
+        let playerY = 250;
+        const playerSpeed = 3;
+        let enemies = [];
+        let isGameOver = true;
+        let gameLoopInterval;
+        let enemySpawnInterval;
+        let score = 0;
+        let moveInterval;
+
+        // Новые переменные для непрерывного движения
+        let moveDirection = { x: 0, y: 0 };
+        let isMoving = false;
 
         function getRandomInt(max) {
             return Math.floor(Math.random() * max);
         }
 
+        // Обновление позиции игрока
         function updatePlayerPosition() {
+            if (isGameOver) return;
+            
+            playerX += moveDirection.x * playerSpeed;
+            playerY += moveDirection.y * playerSpeed;
+
+            // Проверка границ
+            if (playerX < 0) playerX = 0;
+            if (playerX > gameContainer.offsetWidth - player.offsetWidth) playerX = gameContainer.offsetWidth - player.offsetWidth;
+            if (playerY < 0) playerY = 0;
+            if (playerY > gameContainer.offsetHeight - player.offsetHeight) playerY = gameContainer.offsetHeight - player.offsetHeight;
+
             player.style.left = `${playerX}px`;
             player.style.top = `${playerY}px`;
         }
 
-        function createItem() {
-            const item = document.createElement('div');
-            item.className = 'item';
+        // Создание врагов
+        function createEnemy() {
+            const enemy = document.createElement('div');
+            enemy.className = 'enemy';
+            const side = getRandomInt(4);
+            
+            let enemyX, enemyY, speedX, speedY;
 
-            if (score % 5 === 0 && score > 0) {
-                item.classList.add('special-item');
+            switch (side) {
+                case 0: // Top
+                    enemyX = getRandomInt(gameContainer.offsetWidth);
+                    enemyY = -20;
+                    speedX = getRandomInt(3) - 1; // -1, 0, 1
+                    speedY = getRandomInt(3) + 2;
+                    break;
+                case 1: // Right
+                    enemyX = gameContainer.offsetWidth + 20;
+                    enemyY = getRandomInt(gameContainer.offsetHeight);
+                    speedX = -(getRandomInt(3) + 2);
+                    speedY = getRandomInt(3) - 1;
+                    break;
+                case 2: // Bottom
+                    enemyX = getRandomInt(gameContainer.offsetWidth);
+                    enemyY = gameContainer.offsetHeight + 20;
+                    speedX = getRandomInt(3) - 1;
+                    speedY = -(getRandomInt(3) + 2);
+                    break;
+                case 3: // Left
+                    enemyX = -20;
+                    enemyY = getRandomInt(gameContainer.offsetHeight);
+                    speedX = getRandomInt(3) + 2;
+                    speedY = getRandomInt(3) - 1;
+                    break;
             }
 
-            const randomX = getRandomInt(gameContainer.offsetWidth - 25);
-            const randomY = getRandomInt(gameContainer.offsetHeight - 25);
-            item.style.left = `${randomX}px`;
-            item.style.top = `${randomY}px`;
-            gameContainer.appendChild(item);
+            enemy.style.left = `${enemyX}px`;
+            enemy.style.top = `${enemyY}px`;
+            gameContainer.appendChild(enemy);
+            enemies.push({ element: enemy, x: enemyX, y: enemyY, speedX: speedX, speedY: speedY });
         }
 
-        function checkCollision() {
-            const items = document.querySelectorAll('.item');
-            const playerRect = player.getBoundingClientRect();
-            
-            items.forEach(item => {
-                const itemRect = item.getBoundingClientRect();
+        function updateGame() {
+            if (isGameOver) return;
 
-                if (
-                    playerRect.left < itemRect.right &&
-                    playerRect.right > itemRect.left &&
-                    playerRect.top < itemRect.bottom &&
-                    playerRect.bottom > itemRect.top
-                ) {
-                    item.remove();
-                    score++;
-                    scoreDisplay.textContent = `Счёт: ${score}`;
+            // Обновление врагов
+            enemies.forEach(enemy => {
+                enemy.x += enemy.speedX;
+                enemy.y += enemy.speedY;
+                enemy.element.style.left = `${enemy.x}px`;
+                enemy.element.style.top = `${enemy.y}px`;
+            });
 
-                    if (item.classList.contains('special-item')) {
-                        player.style.backgroundColor = 'gold';
-                        setTimeout(() => {
-                            if (!isBoosted) player.style.backgroundColor = '#ff6f61';
-                        }, 500);
-                        for (let i = 0; i < 3; i++) {
-                            createItem();
-                        }
-                    } else {
-                        createItem();
-                    }
-                }
+            checkCollision();
+
+            // Удаление врагов, вышедших за пределы экрана
+            enemies = enemies.filter(enemy => {
+                const rect = enemy.element.getBoundingClientRect();
+                return rect.right > -10 && rect.left < gameContainer.offsetWidth + 10 && rect.bottom > -10 && rect.top < gameContainer.offsetHeight + 10;
+            });
+            enemies.forEach(enemy => {
+                if (!document.body.contains(enemy.element)) return;
+                enemy.element.remove();
             });
         }
 
-        // Новая функция для активации ускорения
-        function activateSpeedBoost() {
-            if (isBoosted) return; // Нельзя активировать повторно
-
-            isBoosted = true;
-            playerSpeed = 10; // Увеличиваем скорость
-            player.classList.add('player-boosted'); // Добавляем класс для визуального эффекта
-            speedBtn.disabled = true; // Отключаем кнопку
-
-            // Через 3 секунды возвращаем всё в норму
-            setTimeout(() => {
-                playerSpeed = 5;
-                isBoosted = false;
-                player.classList.remove('player-boosted');
-                speedBtn.disabled = false;
-            }, 3000);
+        function checkCollision() {
+            const playerRect = player.getBoundingClientRect();
+            enemies.forEach(enemy => {
+                const enemyRect = enemy.element.getBoundingClientRect();
+                if (
+                    playerRect.left < enemyRect.right &&
+                    playerRect.right > enemyRect.left &&
+                    playerRect.top < enemyRect.bottom &&
+                    playerRect.bottom > enemyRect.top
+                ) {
+                    endGame();
+                }
+            });
         }
+        
+        function startGame() {
+            isGameOver = false;
+            startScreen.classList.add('hidden');
+            gameOverScreen.classList.add('hidden');
+            player.style.display = 'block';
+            playerX = gameContainer.offsetWidth / 2;
+            playerY = gameContainer.offsetHeight / 2;
+            updatePlayerPosition();
+
+            score = 0;
+            const startTime = Date.now();
+            
+            gameLoopInterval = setInterval(() => {
+                const currentTime = Date.now();
+                const elapsedTime = (currentTime - startTime) / 1000;
+                score = Math.floor(elapsedTime);
+                scoreDisplay.textContent = `Выживание: ${score} сек`;
+                updateGame();
+            }, 16);
+
+            let spawnRate = 1000;
+            enemySpawnInterval = setInterval(() => {
+                createEnemy();
+                if (spawnRate > 100) {
+                    spawnRate -= 10;
+                    clearInterval(enemySpawnInterval);
+                    enemySpawnInterval = setInterval(createEnemy, spawnRate);
+                }
+            }, spawnRate);
+        }
+
+        function endGame() {
+            isGameOver = true;
+            clearInterval(gameLoopInterval);
+            clearInterval(enemySpawnInterval);
+            clearInterval(moveInterval);
+            
+            finalScore.textContent = `${score} сек`;
+            gameOverScreen.classList.remove('hidden');
+            player.style.display = 'none';
+            enemies.forEach(enemy => enemy.element.remove());
+            enemies = [];
+        }
+
+        function resetGame() {
+            gameOverScreen.classList.add('hidden');
+            startScreen.classList.remove('hidden');
+        }
+
+        // --- Новая логика непрерывного движения ---
 
         // Управление с клавиатуры
         document.addEventListener('keydown', (e) => {
-            let newPlayerX = playerX;
-            let newPlayerY = playerY;
-
+            if (isGameOver || isMoving) return;
+            isMoving = true;
+            
             switch (e.key) {
-                case 'ArrowUp': newPlayerY -= playerSpeed; break;
-                case 'ArrowDown': newPlayerY += playerSpeed; break;
-                case 'ArrowLeft': newPlayerX -= playerSpeed; break;
-                case 'ArrowRight': newPlayerX += playerSpeed; break;
-                case 'Shift': activateSpeedBoost(); break; // Активация ускорения на Shift
+                case 'ArrowUp': moveDirection.y = -1; break;
+                case 'ArrowDown': moveDirection.y = 1; break;
+                case 'ArrowLeft': moveDirection.x = -1; break;
+                case 'ArrowRight': moveDirection.x = 1; break;
             }
-
-            if (newPlayerX >= 0 && newPlayerX <= gameContainer.offsetWidth - player.offsetWidth) {
-                playerX = newPlayerX;
+            if (moveDirection.x !== 0 || moveDirection.y !== 0) {
+                moveInterval = setInterval(updatePlayerPosition, 16);
             }
-            if (newPlayerY >= 0 && newPlayerY <= gameContainer.offsetHeight - player.offsetHeight) {
-                playerY = newPlayerY;
+        });
+        document.addEventListener('keyup', (e) => {
+            isMoving = false;
+            switch (e.key) {
+                case 'ArrowUp':
+                case 'ArrowDown': moveDirection.y = 0; break;
+                case 'ArrowLeft':
+                case 'ArrowRight': moveDirection.x = 0; break;
             }
-
-            updatePlayerPosition();
-            checkCollision();
+            if (moveDirection.x === 0 && moveDirection.y === 0) {
+                clearInterval(moveInterval);
+            }
         });
 
-        // Управление с тачскрина (джойстик)
-        function handleTouchMove(direction) {
-            let newPlayerX = playerX;
-            let newPlayerY = playerY;
-
-            switch (direction) {
-                case 'up': newPlayerY -= playerSpeed; break;
-                case 'down': newPlayerY += playerSpeed; break;
-                case 'left': newPlayerX -= playerSpeed; break;
-                case 'right': newPlayerX += playerSpeed; break;
-            }
-
-            if (newPlayerX >= 0 && newPlayerX <= gameContainer.offsetWidth - player.offsetWidth) {
-                playerX = newPlayerX;
-            }
-            if (newPlayerY >= 0 && newPlayerY <= gameContainer.offsetHeight - player.offsetHeight) {
-                playerY = newPlayerY;
-            }
-
-            updatePlayerPosition();
-            checkCollision();
+        // Управление с тачскрина
+        function startMoving(x, y) {
+            if (isGameOver || isMoving) return;
+            isMoving = true;
+            moveDirection.x = x;
+            moveDirection.y = y;
+            moveInterval = setInterval(updatePlayerPosition, 16);
+        }
+        function stopMoving() {
+            clearInterval(moveInterval);
+            moveDirection.x = 0;
+            moveDirection.y = 0;
+            isMoving = false;
         }
 
-        upBtn.addEventListener('touchstart', () => handleTouchMove('up'));
-        downBtn.addEventListener('touchstart', () => handleTouchMove('down'));
-        leftBtn.addEventListener('touchstart', () => handleTouchMove('left'));
-        rightBtn.addEventListener('touchstart', () => handleTouchMove('right'));
-        // Активация ускорения по тачу
-        speedBtn.addEventListener('touchstart', activateSpeedBoost);
-
-        createItem();
+        upBtn.addEventListener('touchstart', () => startMoving(0, -1));
+        upBtn.addEventListener('touchend', stopMoving);
+        downBtn.addEventListener('touchstart', () => startMoving(0, 1));
+        downBtn.addEventListener('touchend', stopMoving);
+        leftBtn.addEventListener('touchstart', () => startMoving(-1, 0));
+        leftBtn.addEventListener('touchend', stopMoving);
+        rightBtn.addEventListener('touchstart', () => startMoving(1, 0));
+        rightBtn.addEventListener('touchend', stopMoving);
     </script>
 </body>
 </html>
