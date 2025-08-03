@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Поисковик с подсказками</title>
+    <title>Вход на сайт</title>
     <style>
         :root {
             --primary-color: #007bff;
@@ -9,8 +9,6 @@
             --bg-color: #f0f2f5;
             --card-bg-color: #fff;
             --text-color: #1c1e21;
-            --subtle-text-color: #65676b;
-            --border-color: #ddd;
         }
 
         body {
@@ -25,7 +23,7 @@
         }
         .container {
             width: 90%;
-            max-width: 600px;
+            max-width: 400px;
             background-color: var(--card-bg-color);
             border-radius: 12px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
@@ -34,201 +32,93 @@
         }
         h1 {
             color: var(--primary-color);
-            margin-bottom: 2rem;
-            font-size: 2.5rem;
-            letter-spacing: -1px;
+            margin-bottom: 1.5rem;
+            font-size: 2rem;
         }
-        .search-form {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 1rem;
-        }
-        .search-form input {
-            flex-grow: 1;
-            padding: 14px;
+        .login-form input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
             font-size: 1rem;
-            border: 1px solid var(--border-color);
+            border: 1px solid #ccc;
             border-radius: 8px;
-            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+            box-sizing: border-box;
         }
-        .search-form input:focus {
-            outline: none;
-            border-color: var(--primary-color);
-            box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.25);
-        }
-        .search-form button {
-            padding: 14px 28px;
+        .login-form button {
+            width: 100%;
+            padding: 12px;
             font-size: 1rem;
             background-color: var(--primary-color);
             color: white;
             border: none;
             border-radius: 8px;
             cursor: pointer;
-            transition: background-color 0.3s ease, transform 0.2s ease, box-shadow 0.3s ease;
+            transition: background-color 0.3s ease;
         }
-        .search-form button:hover {
+        .login-form button:hover {
             background-color: var(--primary-hover-color);
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
-        .suggestions-container {
-            background-color: var(--card-bg-color);
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            margin-bottom: 2rem;
-            text-align: left;
-            display: none; /* Сначала скрываем */
+        .message {
+            margin-top: 1rem;
+            font-size: 1.1rem;
         }
-        .suggestions-list {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-        }
-        .suggestions-list li {
-            padding: 10px 15px;
-            border-bottom: 1px solid #eee;
-            cursor: pointer;
-            transition: background-color 0.2s ease;
-        }
-        .suggestions-list li:hover {
-            background-color: #f0f2f5;
-        }
-        .suggestions-list li a {
-            text-decoration: none;
-            color: var(--primary-color);
-        }
-        .result-container {
-            margin-top: 1.5rem;
-            padding: 1.5rem;
-            background-color: var(--bg-color);
-            border-radius: 8px;
-        }
-        .result-container a {
-            font-size: 1.2rem;
-            color: var(--primary-color);
-            text-decoration: none;
-            word-wrap: break-word;
-            font-weight: 600;
-            transition: color 0.3s ease;
-        }
-        .result-container a:hover {
-            color: var(--primary-hover-color);
-            text-decoration: underline;
-        }
-        .history-container {
-            margin-top: 2rem;
-            text-align: left;
-        }
-        .history-container h2 {
-            font-size: 1.5rem;
-            color: var(--text-color);
-            margin-bottom: 1rem;
-        }
-        .history-list {
-            list-style: none;
-            padding: 0;
-            background-color: var(--card-bg-color);
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
-        }
-        .history-list li {
-            padding: 12px 20px;
-            border-bottom: 1px solid var(--border-color);
-        }
-        .history-list li:last-child {
-            border-bottom: none;
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
 
     <div class="container">
-        <h1>Свой Поисковик</h1>
-        
-        <form id="url-form" class="search-form">
-            <input type="text" id="url-input" placeholder="Введите URL-адрес, например, google.com" oninput="showSuggestions()">
-            <button type="submit" onclick="searchWebsite(event)">Найти</button>
-        </form>
-
-        <div class="suggestions-container" id="suggestions">
-            <ul class="suggestions-list" id="suggestions-list"></ul>
+        <div id="login-section">
+            <h1>Вход</h1>
+            <div id="error-message" class="message" style="color: red; display: none;">Неверный логин или пароль.</div>
+            <form class="login-form" onsubmit="login(event)">
+                <input type="text" id="username" placeholder="Имя пользователя" required>
+                <input type="password" id="password" placeholder="Пароль" required>
+                <button type="submit">Войти</button>
+            </form>
         </div>
 
-        <div id="result" class="result-container">
-            </div>
-
-        <div class="history-container">
-            <h2>История поиска:</h2>
-            <ul id="history-list" class="history-list">
-                </ul>
+        <div id="welcome-section" class="hidden">
+            <h1>Добро пожаловать!</h1>
+            <p id="welcome-message" class="message"></p>
+            <button onclick="logout()">Выйти</button>
         </div>
     </div>
 
     <script>
-        const allSites = [
-            "google.com",
-            "youtube.com",
-            "roblox.com",
-            "roblox.com/games",
-            "yandex.ru",
-            "vk.com",
-            "wikipedia.org",
-            "github.com",
-            "stackoverflow.com"
-        ];
+        // Здесь мы храним правильные данные для входа.
+        // В настоящем приложении это хранилось бы на сервере, в базе данных.
+        const CORRECT_USERNAME = "user";
+        const CORRECT_PASSWORD = "password123";
 
-        function showSuggestions() {
-            const searchTerm = document.getElementById('url-input').value.toLowerCase();
-            const suggestionsContainer = document.getElementById('suggestions');
-            const suggestionsList = document.getElementById('suggestions-list');
-            
-            suggestionsList.innerHTML = '';
-            
-            if (searchTerm.length === 0) {
-                suggestionsContainer.style.display = 'none';
-                return;
-            }
+        function login(event) {
+            event.preventDefault(); // Предотвращаем перезагрузку страницы
 
-            const matchedSites = allSites.filter(site => site.includes(searchTerm));
-            
-            if (matchedSites.length > 0) {
-                matchedSites.forEach(site => {
-                    const li = document.createElement('li');
-                    li.innerHTML = `<a href="http://${site}" target="_blank">${site}</a>`;
-                    suggestionsList.appendChild(li);
-                });
-                suggestionsContainer.style.display = 'block';
+            const usernameInput = document.getElementById("username").value;
+            const passwordInput = document.getElementById("password").value;
+            const errorMessage = document.getElementById("error-message");
+
+            if (usernameInput === CORRECT_USERNAME && passwordInput === CORRECT_PASSWORD) {
+                // Если данные верны
+                document.getElementById("login-section").classList.add("hidden");
+                document.getElementById("welcome-section").classList.remove("hidden");
+                document.getElementById("welcome-message").textContent = `Привет, ${usernameInput}!`;
+                errorMessage.style.display = "none";
             } else {
-                suggestionsContainer.style.display = 'none';
+                // Если данные неверны
+                errorMessage.style.display = "block";
             }
         }
 
-        function searchWebsite(event) {
-            event.preventDefault();
-
-            const urlInput = document.getElementById('url-input').value;
-            const resultDiv = document.getElementById('result');
-            const historyList = document.getElementById('history-list');
-
-            if (urlInput.trim() === '') {
-                resultDiv.innerHTML = 'Введите адрес, чтобы увидеть результат.';
-                return;
-            }
-
-            let fullUrl = urlInput;
-            if (!urlInput.startsWith('http://') && !urlInput.startsWith('https://')) {
-                fullUrl = 'http://' + urlInput;
-            }
-
-            const linkHtml = `<a href="${fullUrl}" target="_blank">${fullUrl}</a>`;
-            
-            resultDiv.innerHTML = linkHtml;
-
-            const newHistoryItem = document.createElement('li');
-            newHistoryItem.innerHTML = `<a href="${fullUrl}" target="_blank">${fullUrl}</a>`;
-            historyList.prepend(newHistoryItem);
+        function logout() {
+            // Выходим из аккаунта
+            document.getElementById("login-section").classList.remove("hidden");
+            document.getElementById("welcome-section").classList.add("hidden");
+            document.getElementById("username").value = "";
+            document.getElementById("password").value = "";
         }
     </script>
-
 </body>
 </html>
