@@ -44,10 +44,12 @@
         .script-image {
             width: 100%;
             height: 200px; /* Image height */
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
+            background-size: contain; /* Изменено: изображение будет полностью помещаться */
+            background-repeat: no-repeat; /* Убедимся, что не повторяется */
+            background-position: center; /* Центрируем изображение */
             filter: brightness(0.7); /* Slightly darken the image */
+            /* Дополнительно: можно добавить фон, если изображение не покрывает всю область */
+            background-color: #0d1a2e; /* Фон, который будет виден, если изображение меньше */
         }
 
         .script-card h2 {
@@ -206,4 +208,4 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
         });
     </script>
 </body>
-</html>
+                                            </html>
