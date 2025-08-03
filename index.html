@@ -454,38 +454,35 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const copyButtons = document.querySelectorAll('.copy-button');
+            // Используем делегирование событий для кнопок, чтобы они работали надежнее
+            // даже если DOM изменяется или кнопки добавляются динамически.
 
-            copyButtons.forEach(button => {
-                const originalIconHTML = button.innerHTML;
+            // Для кнопок копирования
+            document.body.addEventListener('click', (event) => {
+                // Проверяем, был ли клик по кнопке с классом 'copy-button'
+                const button = event.target.closest('.copy-button');
+                if (button) {
+                    const originalIconHTML = button.innerHTML; // Сохраняем иконку до изменения
 
-                button.addEventListener('click', (event) => {
-                    // Исправлено: теперь ищем codeBlock относительно родительского script-card
-                    const scriptCard = event.target.closest('.script-card');
-                    const codeBlock = scriptCard.querySelector('.code-block');
-                    const codeToCopy = codeBlock.textContent.trim();
+                    // Ищем ближайший родительский .code-container, затем .code-block внутри него
+                    const codeContainer = button.closest('.code-container');
+                    if (codeContainer) {
+                        const codeBlock = codeContainer.querySelector('.code-block');
+                        if (codeBlock) {
+                            const codeToCopy = codeBlock.textContent.trim();
 
-                    navigator.clipboard.writeText(codeToCopy)
-                        .then(() => {
-                            console.log('Code copied!');
-                            button.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>';
-                            button.style.backgroundColor = '#28a745';
+                            navigator.clipboard.writeText(codeToCopy)
+                                .then(() => {
+                                    console.log('Code copied!');
+                                    button.innerHTML = '<svg viewBox="0 0 24 24"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z"/></svg>';
+                                    button.style.backgroundColor = '#28a745';
 
-                            setTimeout(() => {
-                                button.innerHTML = originalIconHTML;
-                                button.style.backgroundColor = '#007bff';
-                            }, 2000);
-                        })
-                        .catch(err => {
-                            console.error('Failed to copy code: ', err);
-                        });
-                });
-            });
-
-            const optionsButtons = document.querySelectorAll('.options-button');
-            optionsButtons.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    // Исправлено: теперь ищем infoPanel относительно родительского script-card
-                    const scriptCard = event.target.closest('.script-card');
-                    const infoPanel = scriptCard.querySelector('.info-panel');
-                    const ellipsisIcon
+                                    setTimeout(() => {
+                                        button.innerHTML = originalIconHTML;
+                                        button.style.backgroundColor = '#007bff';
+                                    }, 2000);
+                                })
+                                .catch(err => {
+                                    console.error('Failed to copy code: ', err);
+                                });
+                
