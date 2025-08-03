@@ -1,104 +1,131 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Поиск игр с иконками</title>
+    <title>Продвинутый поиск игр</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             margin: 0;
-            background-color: #f4f4f4;
-            color: #333;
-        }
-        header {
-            background-color: #333;
-            color: white;
-            padding: 1rem;
-            text-align: center;
+            background-color: #f0f2f5;
+            color: #1c1e21;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
         }
         .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-            padding: 2rem 0;
+            width: 90%;
+            max-width: 800px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 2.5rem;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+            margin-bottom: 2rem;
+            font-size: 2.5rem;
         }
         .search-container {
-            text-align: center;
-            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            margin-bottom: 2rem;
         }
-        .search-container input, .search-container button {
-            padding: 10px;
-            font-size: 16px;
-            border-radius: 5px;
+        .search-container input {
+            flex-grow: 1;
+            padding: 12px;
+            font-size: 1rem;
             border: 1px solid #ccc;
+            border-radius: 6px;
         }
         .search-container button {
+            padding: 12px 24px;
+            font-size: 1rem;
             background-color: #007bff;
             color: white;
-            cursor: pointer;
             border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        .search-container button:hover {
+            background-color: #0056b3;
         }
         .results-container {
-            background-color: white;
-            padding: 2rem;
-            border-radius: 5px;
+            background-color: #f9f9f9;
+            padding: 1.5rem;
+            border-radius: 6px;
+        }
+        .results-container h2 {
+            margin-top: 0;
+            font-size: 1.5rem;
         }
         .results-container ul {
             list-style: none;
             padding: 0;
         }
         .results-container li {
-            padding: 10px;
+            padding: 15px;
             border-bottom: 1px solid #eee;
             display: flex;
             align-items: center;
+            transition: background-color 0.3s ease;
         }
         .results-container li:last-child {
             border-bottom: none;
         }
+        .results-container li:hover {
+            background-color: #e9e9e9;
+        }
         .game-icon {
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             border-radius: 5px;
-            margin-right: 15px;
+            margin-right: 20px;
         }
         .game-link {
             text-decoration: none;
             color: #007bff;
-            font-weight: bold;
+            font-weight: 600;
+            font-size: 1.2rem;
         }
     </style>
 </head>
 <body>
 
-    <header>
-        <h1>Поиск популярных игр Roblox</h1>
-    </header>
-
     <div class="container">
+        <h1>Поиск игр Roblox</h1>
+        
         <div class="search-container">
-            <input type="text" id="game-search" placeholder="Найти игру (например, Adopt Me!)">
+            <input type="text" id="game-search" placeholder="Найти игру">
             <button onclick="searchGames()">Найти</button>
         </div>
 
         <div class="results-container" id="results">
             <h2>Популярные игры:</h2>
             <ul>
-                <li><img src="https://via.placeholder.com/50.png?text=AM" alt="Adopt Me icon" class="game-icon"><a href="https://www.roblox.com/games/920587237/Adopt-Me" class="game-link" target="_blank">Adopt Me!</a></li>
-                <li><img src="https://via.placeholder.com/50.png?text=BH" alt="Brookhaven icon" class="game-icon"><a href="https://www.roblox.com/games/4924922222/Brookhaven" class="game-link" target="_blank">Brookhaven</a></li>
-                <li><img src="https://via.placeholder.com/50.png?text=ToH" alt="Tower of Hell icon" class="game-icon"><a href="https://www.roblox.com/games/196208682/Tower-of-Hell" class="game-link" target="_blank">Tower of Hell</a></li>
+                <li><img src="https://via.placeholder.com/60.png?text=AM" alt="Adopt Me icon" class="game-icon"><a href="https://www.roblox.com/games/920587237/Adopt-Me" class="game-link" target="_blank">Adopt Me!</a></li>
+                <li><img src="https://via.placeholder.com/60.png?text=BH" alt="Brookhaven icon" class="game-icon"><a href="https://www.roblox.com/games/4924922222/Brookhaven" class="game-link" target="_blank">Brookhaven</a></li>
+                <li><img src="https://via.placeholder.com/60.png?text=ToH" alt="Tower of Hell icon" class="game-icon"><a href="https://www.roblox.com/games/196208682/Tower-of-Hell" class="game-link" target="_blank">Tower of Hell</a></li>
             </ul>
         </div>
     </div>
 
     <script>
         function searchGames() {
-            // Список "популярных" игр в виде объектов
-            const popularGames = [
-                { name: "Adopt Me!", link: "https://www.roblox.com/games/920587237/Adopt-Me", icon: "https://via.placeholder.com/50.png?text=AM" },
-                { name: "Brookhaven", link: "https://www.roblox.com/games/4924922222/Brookhaven", icon: "https://via.placeholder.com/50.png?text=BH" },
-                { name: "Tower of Hell", link: "https://www.roblox.com/games/196208682/Tower-of-Hell", icon: "https://via.placeholder.com/50.png?text=ToH" },
-                { name: "Murder Mystery 2", link: "https://www.roblox.com/games/142823291/Murder-Mystery-2", icon: "https://via.placeholder.com/50.png?text=MM2" },
-                { name: "Blox Fruits", link: "https://www.roblox.com/games/2753915549/Blox-Fruits", icon: "https://via.placeholder.com/50.png?text=BF" }
+            // Увеличенный список игр для демонстрации
+            const allGames = [
+                { name: "Adopt Me!", link: "https://www.roblox.com/games/920587237/Adopt-Me", icon: "https://via.placeholder.com/60.png?text=AM" },
+                { name: "Brookhaven", link: "https://www.roblox.com/games/4924922222/Brookhaven", icon: "https://via.placeholder.com/60.png?text=BH" },
+                { name: "Tower of Hell", link: "https://www.roblox.com/games/196208682/Tower-of-Hell", icon: "https://via.placeholder.com/60.png?text=ToH" },
+                { name: "Murder Mystery 2", link: "https://www.roblox.com/games/142823291/Murder-Mystery-2", icon: "https://via.placeholder.com/60.png?text=MM2" },
+                { name: "Blox Fruits", link: "https://www.roblox.com/games/2753915549/Blox-Fruits", icon: "https://via.placeholder.com/60.png?text=BF" },
+                { name: "Jailbreak", link: "https://www.roblox.com/games/606849621/Jailbreak", icon: "https://via.placeholder.com/60.png?text=JB" },
+                { name: "Royale High", link: "https://www.roblox.com/games/735030788/Royale-High", icon: "https://via.placeholder.com/60.png?text=RH" },
+                { name: "Piggy", link: "https://www.roblox.com/games/4623386862/Piggy", icon: "https://via.placeholder.com/60.png?text=PG" },
+                { name: "Welcome to Bloxburg", link: "https://www.roblox.com/games/185655149/Bloxburg", icon: "https://via.placeholder.com/60.png?text=BT" },
+                { name: "BedWars", link: "https://www.roblox.com/games/6872914109/BedWars", icon: "https://via.placeholder.com/60.png?text=BW" }
             ];
             
             const searchTerm = document.getElementById('game-search').value.toLowerCase();
@@ -107,7 +134,7 @@
             let resultsHtml = '<h2>Результаты поиска:</h2><ul>';
             let found = false;
 
-            for (const game of popularGames) {
+            for (const game of allGames) {
                 if (game.name.toLowerCase().includes(searchTerm)) {
                     resultsHtml += `
                         <li>
