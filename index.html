@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Вход на сайт</title>
+    <title>Вход и регистрация</title>
     <style>
         :root {
             --primary-color: #007bff;
@@ -35,7 +35,7 @@
             margin-bottom: 1.5rem;
             font-size: 2rem;
         }
-        .login-form input {
+        .auth-form input {
             width: 100%;
             padding: 12px;
             margin-bottom: 15px;
@@ -44,7 +44,7 @@
             border-radius: 8px;
             box-sizing: border-box;
         }
-        .login-form button {
+        .auth-form button {
             width: 100%;
             padding: 12px;
             font-size: 1rem;
@@ -55,7 +55,7 @@
             cursor: pointer;
             transition: background-color 0.3s ease;
         }
-        .login-form button:hover {
+        .auth-form button:hover {
             background-color: var(--primary-hover-color);
         }
         .message {
@@ -65,6 +65,28 @@
         .hidden {
             display: none;
         }
+        .toggle-link {
+            display: block;
+            margin-top: 1rem;
+            color: var(--primary-color);
+            cursor: pointer;
+            text-decoration: underline;
+        }
+        .google-btn {
+            width: 100%;
+            padding: 12px;
+            font-size: 1rem;
+            background-color: #4285f4;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            margin-top: 15px;
+            transition: background-color 0.3s ease;
+        }
+        .google-btn:hover {
+            background-color: #357ae8;
+        }
     </style>
 </head>
 <body>
@@ -73,11 +95,24 @@
         <div id="login-section">
             <h1>Вход</h1>
             <div id="error-message" class="message" style="color: red; display: none;">Неверный логин или пароль.</div>
-            <form class="login-form" onsubmit="login(event)">
-                <input type="text" id="username" placeholder="Имя пользователя" required>
-                <input type="password" id="password" placeholder="Пароль" required>
+            <form class="auth-form" onsubmit="login(event)">
+                <input type="text" id="login-username" placeholder="Имя пользователя" required>
+                <input type="password" id="login-password" placeholder="Пароль" required>
                 <button type="submit">Войти</button>
             </form>
+            <button class="google-btn" onclick="googleLogin()">Войти через Google</button>
+            <span class="toggle-link" onclick="showRegister()">Зарегистрироваться</span>
+        </div>
+
+        <div id="register-section" class="hidden">
+            <h1>Регистрация</h1>
+            <div id="register-error" class="message" style="color: red; display: none;"></div>
+            <form class="auth-form" onsubmit="register(event)">
+                <input type="text" id="register-username" placeholder="Имя пользователя" required>
+                <input type="password" id="register-password" placeholder="Пароль" required>
+                <button type="submit">Зарегистрироваться</button>
+            </form>
+            <span class="toggle-link" onclick="showLogin()">Уже есть аккаунт? Войти</span>
         </div>
 
         <div id="welcome-section" class="hidden">
@@ -88,36 +123,70 @@
     </div>
 
     <script>
-        // Здесь мы храним правильные данные для входа.
-        // В настоящем приложении это хранилось бы на сервере, в базе данных.
-        const CORRECT_USERNAME = "user";
-        const CORRECT_PASSWORD = "password123";
+        // Имитация базы данных пользователей
+        const users = [
+            { username: "user", password: "password123" }
+        ];
+
+        function showRegister() {
+            document.getElementById("login-section").classList.add("hidden");
+            document.getElementById("register-section").classList.remove("hidden");
+        }
+
+        function showLogin() {
+            document.getElementById("register-section").classList.add("hidden");
+            document.getElementById("login-section").classList.remove("hidden");
+        }
 
         function login(event) {
-            event.preventDefault(); // Предотвращаем перезагрузку страницы
-
-            const usernameInput = document.getElementById("username").value;
-            const passwordInput = document.getElementById("password").value;
+            event.preventDefault();
+            const usernameInput = document.getElementById("login-username").value;
+            const passwordInput = document.getElementById("login-password").value;
             const errorMessage = document.getElementById("error-message");
 
-            if (usernameInput === CORRECT_USERNAME && passwordInput === CORRECT_PASSWORD) {
-                // Если данные верны
+            const user = users.find(u => u.username === usernameInput && u.password === passwordInput);
+            
+            if (user) {
                 document.getElementById("login-section").classList.add("hidden");
                 document.getElementById("welcome-section").classList.remove("hidden");
-                document.getElementById("welcome-message").textContent = `Привет, ${usernameInput}!`;
+                document.getElementById("welcome-message").textContent = `Привет, ${user.username}!`;
                 errorMessage.style.display = "none";
             } else {
-                // Если данные неверны
                 errorMessage.style.display = "block";
             }
         }
 
+        function register(event) {
+            event.preventDefault();
+            const usernameInput = document.getElementById("register-username").value;
+            const passwordInput = document.getElementById("register-password").value;
+            const errorMessage = document.getElementById("register-error");
+
+            if (users.find(u => u.username === usernameInput)) {
+                errorMessage.textContent = "Это имя пользователя уже занято.";
+                errorMessage.style.display = "block";
+            } else {
+                users.push({ username: usernameInput, password: passwordInput });
+                errorMessage.style.display = "none";
+                alert("Вы успешно зарегистрировались! Теперь войдите в аккаунт.");
+                showLogin();
+            }
+        }
+
         function logout() {
-            // Выходим из аккаунта
             document.getElementById("login-section").classList.remove("hidden");
             document.getElementById("welcome-section").classList.add("hidden");
-            document.getElementById("username").value = "";
-            document.getElementById("password").value = "";
+            document.getElementById("login-username").value = "";
+            document.getElementById("login-password").value = "";
+            document.getElementById("register-username").value = "";
+            document.getElementById("register-password").value = "";
+        }
+
+        function googleLogin() {
+            // Это имитация, потому что настоящий вход через Google требует сервера.
+            document.getElementById("login-section").classList.add("hidden");
+            document.getElementById("welcome-section").classList.remove("hidden");
+            document.getElementById("welcome-message").textContent = `Привет, Google-пользователь!`;
         }
     </script>
 </body>
