@@ -1,193 +1,257 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Вход и регистрация</title>
+    <title>Игра: Сборщик предметов 2.0</title>
     <style>
-        :root {
-            --primary-color: #007bff;
-            --primary-hover-color: #0056b3;
-            --bg-color: #f0f2f5;
-            --card-bg-color: #fff;
-            --text-color: #1c1e21;
-        }
-
         body {
-            font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            margin: 0;
-            background-color: var(--bg-color);
-            color: var(--text-color);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             display: flex;
             justify-content: center;
             align-items: center;
-            min-height: 100vh;
+            flex-direction: column;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+            overflow: hidden;
         }
-        .container {
-            width: 90%;
-            max-width: 400px;
-            background-color: var(--card-bg-color);
-            border-radius: 12px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
-            padding: 2.5rem;
-            text-align: center;
-        }
+
         h1 {
-            color: var(--primary-color);
-            margin-bottom: 1.5rem;
-            font-size: 2rem;
+            color: #4a4a4a;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
         }
-        .auth-form input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            font-size: 1rem;
-            border: 1px solid #ccc;
+
+        #game-container {
+            width: 500px;
+            height: 400px;
+            border: 5px solid #4a90e2;
+            border-radius: 15px;
+            background-color: #f8f9fa;
+            position: relative;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+            overflow: hidden;
+            touch-action: none; /* Для лучшей работы на мобильных устройствах */
+        }
+
+        #player {
+            width: 30px;
+            height: 30px;
+            background-color: #ff6f61;
             border-radius: 8px;
-            box-sizing: border-box;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            box-shadow: 0 0 15px #ff6f61;
+            transition: background-color 0.2s;
         }
-        .auth-form button {
-            width: 100%;
-            padding: 12px;
-            font-size: 1rem;
-            background-color: var(--primary-color);
+
+        .item {
+            width: 25px;
+            height: 25px;
+            background-color: #6a11cb;
+            border-radius: 50%;
+            position: absolute;
+            box-shadow: 0 0 10px #6a11cb;
+            transition: transform 0.3s ease-out;
+        }
+
+        .special-item {
+            background-color: #f7b731;
+            box-shadow: 0 0 15px #f7b731;
+        }
+
+        #score-display {
+            margin-top: 20px;
+            font-size: 28px;
+            font-weight: bold;
+            color: #4a4a4a;
+        }
+
+        .controls {
+            display: none; /* По умолчанию скрываем */
+            position: fixed;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            gap: 15px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .controls button {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background-color: rgba(0, 0, 0, 0.5);
             color: white;
             border: none;
-            border-radius: 8px;
+            font-size: 24px;
             cursor: pointer;
-            transition: background-color 0.3s ease;
+            transition: background-color 0.2s;
         }
-        .auth-form button:hover {
-            background-color: var(--primary-hover-color);
+        .controls button:active {
+            background-color: rgba(0, 0, 0, 0.8);
         }
-        .message {
-            margin-top: 1rem;
-            font-size: 1.1rem;
-        }
-        .hidden {
-            display: none;
-        }
-        .toggle-link {
-            display: block;
-            margin-top: 1rem;
-            color: var(--primary-color);
-            cursor: pointer;
-            text-decoration: underline;
-        }
-        .google-btn {
-            width: 100%;
-            padding: 12px;
-            font-size: 1rem;
-            background-color: #4285f4;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            margin-top: 15px;
-            transition: background-color 0.3s ease;
-        }
-        .google-btn:hover {
-            background-color: #357ae8;
+        
+        /* Адаптивный дизайн для мобильных */
+        @media (max-width: 600px) {
+            #game-container {
+                width: 95%;
+                height: 300px;
+            }
+            .controls {
+                display: flex;
+            }
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <div id="login-section">
-            <h1>Вход</h1>
-            <div id="error-message" class="message" style="color: red; display: none;">Неверный логин или пароль.</div>
-            <form class="auth-form" onsubmit="login(event)">
-                <input type="text" id="login-username" placeholder="Имя пользователя" required>
-                <input type="password" id="login-password" placeholder="Пароль" required>
-                <button type="submit">Войти</button>
-            </form>
-            <button class="google-btn" onclick="googleLogin()">Войти через Google</button>
-            <span class="toggle-link" onclick="showRegister()">Зарегистрироваться</span>
+    <h1>Сборщик предметов 2.0</h1>
+    <div id="game-container">
+        <div id="player"></div>
         </div>
-
-        <div id="register-section" class="hidden">
-            <h1>Регистрация</h1>
-            <div id="register-error" class="message" style="color: red; display: none;"></div>
-            <form class="auth-form" onsubmit="register(event)">
-                <input type="text" id="register-username" placeholder="Имя пользователя" required>
-                <input type="password" id="register-password" placeholder="Пароль" required>
-                <button type="submit">Зарегистрироваться</button>
-            </form>
-            <span class="toggle-link" onclick="showLogin()">Уже есть аккаунт? Войти</span>
-        </div>
-
-        <div id="welcome-section" class="hidden">
-            <h1>Добро пожаловать!</h1>
-            <p id="welcome-message" class="message"></p>
-            <button onclick="logout()">Выйти</button>
-        </div>
+    <div id="score-display">Счёт: 0</div>
+    
+    <div class="controls">
+        <button id="up-btn">↑</button>
+        <button id="left-btn">←</button>
+        <button id="right-btn">→</button>
+        <button id="down-btn">↓</button>
     </div>
 
     <script>
-        // Имитация базы данных пользователей
-        const users = [
-            { username: "user", password: "password123" }
-        ];
+        const gameContainer = document.getElementById('game-container');
+        const player = document.getElementById('player');
+        const scoreDisplay = document.getElementById('score-display');
+        const upBtn = document.getElementById('up-btn');
+        const downBtn = document.getElementById('down-btn');
+        const leftBtn = document.getElementById('left-btn');
+        const rightBtn = document.getElementById('right-btn');
 
-        function showRegister() {
-            document.getElementById("login-section").classList.add("hidden");
-            document.getElementById("register-section").classList.remove("hidden");
+        let score = 0;
+        let playerX = 250;
+        let playerY = 200;
+        const playerSpeed = 5;
+
+        // Генерация случайного числа для спавна предметов
+        function getRandomInt(max) {
+            return Math.floor(Math.random() * max);
         }
 
-        function showLogin() {
-            document.getElementById("register-section").classList.add("hidden");
-            document.getElementById("login-section").classList.remove("hidden");
+        // Обновление позиции игрока
+        function updatePlayerPosition() {
+            player.style.left = `${playerX}px`;
+            player.style.top = `${playerY}px`;
         }
 
-        function login(event) {
-            event.preventDefault();
-            const usernameInput = document.getElementById("login-username").value;
-            const passwordInput = document.getElementById("login-password").value;
-            const errorMessage = document.getElementById("error-message");
+        // Создание предметов
+        function createItem() {
+            const item = document.createElement('div');
+            item.className = 'item';
 
-            const user = users.find(u => u.username === usernameInput && u.password === passwordInput);
+            // "Прикол": каждый 5-й предмет будет особенным
+            if (score % 5 === 0 && score > 0) {
+                item.classList.add('special-item');
+            }
+
+            const randomX = getRandomInt(gameContainer.offsetWidth - 25);
+            const randomY = getRandomInt(gameContainer.offsetHeight - 25);
+            item.style.left = `${randomX}px`;
+            item.style.top = `${randomY}px`;
+            gameContainer.appendChild(item);
+        }
+
+        // Проверка столкновений
+        function checkCollision() {
+            const items = document.querySelectorAll('.item');
+            const playerRect = player.getBoundingClientRect();
             
-            if (user) {
-                document.getElementById("login-section").classList.add("hidden");
-                document.getElementById("welcome-section").classList.remove("hidden");
-                document.getElementById("welcome-message").textContent = `Привет, ${user.username}!`;
-                errorMessage.style.display = "none";
-            } else {
-                errorMessage.style.display = "block";
+            items.forEach(item => {
+                const itemRect = item.getBoundingClientRect();
+
+                if (
+                    playerRect.left < itemRect.right &&
+                    playerRect.right > itemRect.left &&
+                    playerRect.top < itemRect.bottom &&
+                    playerRect.bottom > itemRect.top
+                ) {
+                    item.remove();
+                    score++;
+                    scoreDisplay.textContent = `Счёт: ${score}`;
+
+                    // "Прикол": особый эффект для специального предмета
+                    if (item.classList.contains('special-item')) {
+                        player.style.backgroundColor = 'gold';
+                        setTimeout(() => {
+                            player.style.backgroundColor = '#ff6f61';
+                        }, 500);
+                        // Дополнительный "прикол": создаем сразу 3 новых предмета
+                        for (let i = 0; i < 3; i++) {
+                            createItem();
+                        }
+                    } else {
+                        createItem();
+                    }
+                }
+            });
+        }
+
+        // Управление с клавиатуры
+        document.addEventListener('keydown', (e) => {
+            let newPlayerX = playerX;
+            let newPlayerY = playerY;
+
+            switch (e.key) {
+                case 'ArrowUp': newPlayerY -= playerSpeed; break;
+                case 'ArrowDown': newPlayerY += playerSpeed; break;
+                case 'ArrowLeft': newPlayerX -= playerSpeed; break;
+                case 'ArrowRight': newPlayerX += playerSpeed; break;
             }
-        }
 
-        function register(event) {
-            event.preventDefault();
-            const usernameInput = document.getElementById("register-username").value;
-            const passwordInput = document.getElementById("register-password").value;
-            const errorMessage = document.getElementById("register-error");
-
-            if (users.find(u => u.username === usernameInput)) {
-                errorMessage.textContent = "Это имя пользователя уже занято.";
-                errorMessage.style.display = "block";
-            } else {
-                users.push({ username: usernameInput, password: passwordInput });
-                errorMessage.style.display = "none";
-                alert("Вы успешно зарегистрировались! Теперь войдите в аккаунт.");
-                showLogin();
+            // Проверка, чтобы игрок не выходил за границы
+            if (newPlayerX >= 0 && newPlayerX <= gameContainer.offsetWidth - player.offsetWidth) {
+                playerX = newPlayerX;
             }
+            if (newPlayerY >= 0 && newPlayerY <= gameContainer.offsetHeight - player.offsetHeight) {
+                playerY = newPlayerY;
+            }
+
+            updatePlayerPosition();
+            checkCollision();
+        });
+
+        // Управление с тачскрина (джойстик)
+        function handleTouchMove(direction) {
+            let newPlayerX = playerX;
+            let newPlayerY = playerY;
+
+            switch (direction) {
+                case 'up': newPlayerY -= playerSpeed; break;
+                case 'down': newPlayerY += playerSpeed; break;
+                case 'left': newPlayerX -= playerSpeed; break;
+                case 'right': newPlayerX += playerSpeed; break;
+            }
+
+            if (newPlayerX >= 0 && newPlayerX <= gameContainer.offsetWidth - player.offsetWidth) {
+                playerX = newPlayerX;
+            }
+            if (newPlayerY >= 0 && newPlayerY <= gameContainer.offsetHeight - player.offsetHeight) {
+                playerY = newPlayerY;
+            }
+
+            updatePlayerPosition();
+            checkCollision();
         }
 
-        function logout() {
-            document.getElementById("login-section").classList.remove("hidden");
-            document.getElementById("welcome-section").classList.add("hidden");
-            document.getElementById("login-username").value = "";
-            document.getElementById("login-password").value = "";
-            document.getElementById("register-username").value = "";
-            document.getElementById("register-password").value = "";
-        }
+        upBtn.addEventListener('touchstart', () => handleTouchMove('up'));
+        downBtn.addEventListener('touchstart', () => handleTouchMove('down'));
+        leftBtn.addEventListener('touchstart', () => handleTouchMove('left'));
+        rightBtn.addEventListener('touchstart', () => handleTouchMove('right'));
 
-        function googleLogin() {
-            // Это имитация, потому что настоящий вход через Google требует сервера.
-            document.getElementById("login-section").classList.add("hidden");
-            document.getElementById("welcome-section").classList.remove("hidden");
-            document.getElementById("welcome-message").textContent = `Привет, Google-пользователь!`;
-        }
+        // Начало игры
+        createItem();
     </script>
 </body>
 </html>
