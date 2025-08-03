@@ -41,16 +41,26 @@
             flex-direction: column;
         }
 
-        .script-image {
+        /* --- Изменения здесь: новый стиль для контейнера изображения --- */
+        .script-image-container {
             width: 100%;
-            height: 200px; /* Image height */
-            background-size: contain; /* Изменено: изображение будет полностью помещаться */
-            background-repeat: no-repeat; /* Убедимся, что не повторяется */
-            background-position: center; /* Центрируем изображение */
-            filter: brightness(0.7); /* Slightly darken the image */
-            /* Дополнительно: можно добавить фон, если изображение не покрывает всю область */
-            background-color: #0d1a2e; /* Фон, который будет виден, если изображение меньше */
+            height: 200px; /* Фиксированная высота для области изображения */
+            overflow: hidden; /* Обрезаем, если изображение выходит за пределы */
+            display: flex; /* Для центрирования изображения */
+            align-items: center; /* Центрирование по вертикали */
+            justify-content: center; /* Центрирование по горизонтали */
+            background-color: #0a1420; /* Фоновый цвет, если изображение не покрывает все */
         }
+
+        .script-image-container img {
+            width: 100%; /* Изображение будет стараться заполнить всю ширину */
+            height: 100%; /* Изображение будет стараться заполнить всю высоту */
+            object-fit: contain; /* Ключевое изменение: масштабирует изображение, чтобы оно полностью поместилось в контейнер, сохраняя пропорции. Пустое пространство будет заполнено background-color родителя. */
+            filter: brightness(0.7); /* Немного затемняем изображение */
+            display: block; /* Убираем лишние пробелы под изображением */
+        }
+        /* --- Конец изменений для изображения --- */
+
 
         .script-card h2 {
             color: #ffffff;
@@ -127,7 +137,8 @@
 
     <main>
         <section class="script-card">
-            <div class="script-image" style="background-image: url('https://ucarecdn.com/a240211e-de60-4078-8284-715663da996d/1_20250803182522.png');"></div>
+            <div class="script-image-container"> <img src="https://ucarecdn.com/a240211e-de60-4078-8284-715663da996d/1_20250803182522.png" alt="FPS Booster Script Image">
+            </div>
             <h2>Fps Booster</h2>
             <div class="code-container">
                 <pre class="code-block">
@@ -142,7 +153,9 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/Best-Fps
         </section>
 
         <section class="script-card">
-            <div class="script-image" style="background-image: url('https://ucarecdn.com/e61973cb-200f-4166-a3ce-020aeef2607d/3_20250803195707.png');"></div>
+            <div class="script-image-container">
+                <img src="https://ucarecdn.com/e61973cb-200f-4166-a3ce-020aeef2607d/3_20250803195707.png" alt="Unknown Battle Simulator Script Image">
+            </div>
             <h2>Unknown Battle Simulator</h2>
             <div class="code-container">
                 <pre class="code-block">
@@ -157,7 +170,9 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/All-spec
         </section>
 
         <section class="script-card">
-            <div class="script-image" style="background-image: url('https://ucarecdn.com/19c82375-23e2-4e8a-ab63-b5dde0a02f5c/2_20250803194425.png');"></div>
+            <div class="script-image-container">
+                <img src="https://ucarecdn.com/19c82375-23e2-4e8a-ab63-b5dde0a02f5c/2_20250803194425.png" alt="Anti-Kick Script Image">
+            </div>
             <h2>Anti-Kick</h2>
             <div class="code-container">
                 <pre class="code-block">
@@ -208,4 +223,4 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
         });
     </script>
 </body>
-                                            </html>
+    </html>
