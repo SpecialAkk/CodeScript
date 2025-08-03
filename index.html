@@ -1,11 +1,132 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>Обычный текст</title>
+    <title>Поиск игр с иконками</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+        header {
+            background-color: #333;
+            color: white;
+            padding: 1rem;
+            text-align: center;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+            padding: 2rem 0;
+        }
+        .search-container {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .search-container input, .search-container button {
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .search-container button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            border: none;
+        }
+        .results-container {
+            background-color: white;
+            padding: 2rem;
+            border-radius: 5px;
+        }
+        .results-container ul {
+            list-style: none;
+            padding: 0;
+        }
+        .results-container li {
+            padding: 10px;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+        }
+        .results-container li:last-child {
+            border-bottom: none;
+        }
+        .game-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 5px;
+            margin-right: 15px;
+        }
+        .game-link {
+            text-decoration: none;
+            color: #007bff;
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 
-  <p>print("Hello, World!")</p>
+    <header>
+        <h1>Поиск популярных игр Roblox</h1>
+    </header>
+
+    <div class="container">
+        <div class="search-container">
+            <input type="text" id="game-search" placeholder="Найти игру (например, Adopt Me!)">
+            <button onclick="searchGames()">Найти</button>
+        </div>
+
+        <div class="results-container" id="results">
+            <h2>Популярные игры:</h2>
+            <ul>
+                <li><img src="https://via.placeholder.com/50.png?text=AM" alt="Adopt Me icon" class="game-icon"><a href="https://www.roblox.com/games/920587237/Adopt-Me" class="game-link" target="_blank">Adopt Me!</a></li>
+                <li><img src="https://via.placeholder.com/50.png?text=BH" alt="Brookhaven icon" class="game-icon"><a href="https://www.roblox.com/games/4924922222/Brookhaven" class="game-link" target="_blank">Brookhaven</a></li>
+                <li><img src="https://via.placeholder.com/50.png?text=ToH" alt="Tower of Hell icon" class="game-icon"><a href="https://www.roblox.com/games/196208682/Tower-of-Hell" class="game-link" target="_blank">Tower of Hell</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        function searchGames() {
+            // Список "популярных" игр в виде объектов
+            const popularGames = [
+                { name: "Adopt Me!", link: "https://www.roblox.com/games/920587237/Adopt-Me", icon: "https://via.placeholder.com/50.png?text=AM" },
+                { name: "Brookhaven", link: "https://www.roblox.com/games/4924922222/Brookhaven", icon: "https://via.placeholder.com/50.png?text=BH" },
+                { name: "Tower of Hell", link: "https://www.roblox.com/games/196208682/Tower-of-Hell", icon: "https://via.placeholder.com/50.png?text=ToH" },
+                { name: "Murder Mystery 2", link: "https://www.roblox.com/games/142823291/Murder-Mystery-2", icon: "https://via.placeholder.com/50.png?text=MM2" },
+                { name: "Blox Fruits", link: "https://www.roblox.com/games/2753915549/Blox-Fruits", icon: "https://via.placeholder.com/50.png?text=BF" }
+            ];
+            
+            const searchTerm = document.getElementById('game-search').value.toLowerCase();
+            const resultsContainer = document.getElementById('results');
+            
+            let resultsHtml = '<h2>Результаты поиска:</h2><ul>';
+            let found = false;
+
+            for (const game of popularGames) {
+                if (game.name.toLowerCase().includes(searchTerm)) {
+                    resultsHtml += `
+                        <li>
+                            <img src="${game.icon}" alt="${game.name} icon" class="game-icon">
+                            <a href="${game.link}" class="game-link" target="_blank">${game.name}</a>
+                        </li>
+                    `;
+                    found = true;
+                }
+            }
+
+            if (!found) {
+                resultsHtml = '<h2>Результаты поиска:</h2><ul><li>Ничего не найдено.</li></ul>';
+            }
+            
+            resultsHtml += '</ul>';
+            resultsContainer.innerHTML = resultsHtml;
+        }
+    </script>
 
 </body>
 </html>
