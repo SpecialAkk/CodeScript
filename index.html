@@ -59,7 +59,6 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
-            position: relative;
         }
 
         .script-image-container {
@@ -124,7 +123,7 @@
             align-items: center;
             justify-content: center;
             transition: background-color 0.3s ease, transform 0.2s ease;
-            z-index: 20;
+            z-index: 10;
             padding: 0;
         }
 
@@ -153,7 +152,7 @@
             align-items: center;
             justify-content: center;
             transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
-            z-index: 20;
+            z-index: 10;
             padding: 0;
         }
 
@@ -195,7 +194,7 @@
         }
 
         .info-panel.expanded {
-            max-height: 500px;
+            max-height: 500px; /* Adjust if content is very long */
             padding: 15px;
         }
 
@@ -211,7 +210,7 @@
             font-size: 0.9em;
             line-height: 1.6;
             color: #c0c0c0;
-            margin-bottom: 10px;
+            margin-bottom: 10px; /* Adjusted for list items too */
         }
         .info-panel ul {
             list-style-type: disc;
@@ -220,30 +219,6 @@
         }
         .info-panel ul li {
             margin-bottom: 5px;
-        }
-
-        .new-update-badge {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background-color: #007bff;
-            color: white;
-            padding: 5px 10px;
-            border-radius: 5px;
-            font-size: 0.8em;
-            font-weight: bold;
-            z-index: 15;
-            opacity: 0;
-            visibility: hidden;
-            pointer-events: none;
-            transition: opacity 0.5s ease-out, visibility 0s linear 0.5s;
-        }
-
-        .new-update-badge.visible {
-            opacity: 1;
-            visibility: visible;
-            pointer-events: auto;
-            transition: opacity 0.5s ease-out;
         }
 
 
@@ -267,7 +242,6 @@
 
     <main>
         <section class="script-card">
-            <div class="new-update-badge" data-script-id="fpsBooster">New Update</div>
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/a240211e-de60-4078-8284-715663da996d/1_20250803182522.png" alt="FPS Booster Script Image">
             </div>
@@ -381,7 +355,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/Best-Fps
         </section>
 
         <section class="script-card">
-            <div class="new-update-badge" data-script-id="unknownBattleSimulator">New Update</div>
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/e61973cb-200f-4166-a3ce-020aeef2607d/3_20250803195707.png" alt="Unknown Battle Simulator Script Image">
             </div>
@@ -422,7 +395,6 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/All-spec
         </section>
 
         <section class="script-card">
-            <div class="new-update-badge" data-script-id="antiKick">New Update</div>
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/19c82375-23e2-4e8a-ab63-b5dde0a02f5c/2_20250803194425.png" alt="Anti-Kick Script Image">
             </div>
@@ -490,15 +462,24 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
 
             const optionsButtons = document.querySelectorAll('.options-button');
             optionsButtons.forEach(button => {
-                button.addEventListener('click', () => {
-                    const scriptCard = button.closest('.script-card');
+                button.addEventListener('click', (event) => {
+                    const scriptCard = event.target.closest('.script-card');
                     const infoPanel = scriptCard.querySelector('.info-panel');
                     const ellipsisIcon = button.querySelector('.ellipsis-icon');
                     const closeIcon = button.querySelector('.close-icon');
 
                     infoPanel.classList.toggle('expanded');
 
-                    const isExpanded = infoPanel.classList.contains('expanded');
-                    ellipsisIcon.style.display = isExpanded ? 'none' : 'inline';
-                    closeIcon.style.display = isExpanded ? 'inline' : 'none';
-       
+                    if (infoPanel.classList.contains('expanded')) {
+                        ellipsisIcon.style.display = 'none';
+                        closeIcon.style.display = 'block';
+                    } else {
+                        ellipsisIcon.style.display = 'block';
+                        closeIcon.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+    </html>
