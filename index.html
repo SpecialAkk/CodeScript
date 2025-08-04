@@ -39,6 +39,7 @@
             border: 2px solid #007bff;
             box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
             transition: transform 0.2s ease;
+            cursor: pointer;
         }
 
         .header-profile-pic:hover {
@@ -76,7 +77,7 @@
             width: 100%;
             height: 100%;
             object-fit: fill;
-            filter: brightness(1.2); /* Increased brightness */
+            filter: brightness(1.2);
             display: block;
         }
 
@@ -248,7 +249,6 @@
             transform: translateY(0); /* Move to original position */
         }
 
-
         footer {
             background-color: #0a1420;
             color: #a0a0a0;
@@ -257,18 +257,104 @@
             margin-top: 30px;
             border-top: 2px solid #1a3a5a;
         }
+
+        /* Modal / Pop-up Styles */
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1000; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
+            align-items: center; /* Center content vertically */
+            justify-content: center; /* Center content horizontally */
+            opacity: 0; /* Start hidden for fade-in */
+            transition: opacity 0.3s ease-out; /* Smooth fade for modal background */
+        }
+
+        .modal.show {
+            display: flex; /* Show the modal */
+            opacity: 1; /* Fade in */
+        }
+
+        .modal-content {
+            background-color: #1a2b40;
+            margin: auto;
+            padding: 30px;
+            border: 1px solid #1f3f5a;
+            border-radius: 10px;
+            width: 80%; /* Could be more responsive */
+            max-width: 400px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.5);
+            transform: translateY(-20px); /* Start slightly above for slide-in */
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Smooth slide and fade for content */
+            opacity: 0; /* Start hidden for fade-in */
+        }
+
+        .modal.show .modal-content {
+            transform: translateY(0); /* Slide to original position */
+            opacity: 1; /* Fade in */
+        }
+
+        .modal-content p {
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            color: #e0e0e0;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: space-around;
+            gap: 15px;
+        }
+
+        .modal-buttons button {
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            flex: 1; /* Make buttons take equal space */
+        }
+
+        .modal-buttons button:first-child { /* Go to button */
+            background-color: #007bff;
+            color: white;
+        }
+
+        .modal-buttons button:first-child:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        .modal-buttons button:last-child { /* Cancel button */
+            background-color: #4a5a6a;
+            color: white;
+        }
+
+        .modal-buttons button:last-child:hover {
+            background-color: #3a4a5a;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
     <header>
         <h1>MEGGD Scripts</h1>
-        <a href="https://scriptblox.com/u/MEGGD" target="_blank" rel="noopener noreferrer">
+        <div id="profilePicContainer">
             <img src="https://scriptblox.com/images/photo/678da39911443eaf1930cfb3-1754243330765.png" alt="MEGGD ScriptBlox Profile" class="header-profile-pic">
-        </a>
+        </div>
     </header>
 
     <main>
-        <section class="script-card" data-new-update="false"> <div class="new-update-badge">New Update</div>
+        <section class="script-card" data-new-update="false">
+            <div class="new-update-badge">New Update</div>
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/a240211e-de60-4078-8284-715663da996d/1_20250803182522.png" alt="FPS Booster Script Image">
             </div>
@@ -381,7 +467,8 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/Best-Fps
             </div>
         </section>
 
-        <section class="script-card" data-new-update="false"> <div class="new-update-badge">New Update</div>
+        <section class="script-card" data-new-update="false">
+            <div class="new-update-badge">New Update</div>
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/e61973cb-200f-4166-a3ce-020aeef2607d/3_20250803195707.png" alt="Unknown Battle Simulator Script Image">
             </div>
@@ -407,21 +494,14 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/All-spec
                 </button>
 
                 <div class="info-panel">
-                    <h3>Update Log (Unknown Battle Simulator)</h3>
-                    <ul>
-                        <li>Initial version.</li>
-                        <li>UpdateGUI + InstructionsGUI.</li>
-                        <li>Bug Fixed InstructionsGUI.</li>
-                        <li>Small optimization + Update InstructionsGUI.</li>
-                        <li>Improved script stability.</li>
-                    </ul>
                     <h3>Information (Unknown Battle Simulator)</h3>
-                    <p>Unlocked all characters even gamepasses in the game "Unknown Battles Simulator"</p>
+                    <p>Unlocked all characters even gamepasses in the game "Unknown Battle Simulator"</p>
                 </div>
             </div>
         </section>
 
-        <section class="script-card" data-new-update="false"> <div class="new-update-badge">New Update</div>
+        <section class="script-card" data-new-update="false">
+            <div class="new-update-badge">New Update</div>
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/19c82375-23e2-4e8a-ab63-b5dde0a02f5c/2_20250803194425.png" alt="Anti-Kick Script Image">
             </div>
@@ -458,6 +538,16 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
     <footer>
         <p>&copy; 2025 MEGGD Scripts</p>
     </footer>
+
+    <div id="profileModal" class="modal">
+        <div class="modal-content">
+            <p>Do you want to open my ScriptBlox profile?</p>
+            <div class="modal-buttons">
+                <button id="goToProfile">Go to</button>
+                <button id="cancelProfile">Cancel</button>
+            </div>
+        </div>
+    </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
@@ -506,7 +596,52 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
                     }
                 });
             });
+
+            // Modal functionality
+            const profilePicContainer = document.getElementById('profilePicContainer');
+            const profileModal = document.getElementById('profileModal');
+            const goToProfileButton = document.getElementById('goToProfile');
+            const cancelProfileButton = document.getElementById('cancelProfile');
+
+            function showModal() {
+                profileModal.classList.add('show');
+            }
+
+            function hideModal() {
+                profileModal.classList.remove('show');
+                // Ensure display: none after transition to prevent interaction
+                profileModal.addEventListener('transitionend', function handler() {
+                    if (!profileModal.classList.contains('show')) {
+                        profileModal.style.display = 'none';
+                    }
+                    profileModal.removeEventListener('transitionend', handler);
+                });
+            }
+
+            profilePicContainer.addEventListener('click', () => {
+                profileModal.style.display = 'flex'; // Make sure it's visible before adding 'show'
+                // Small delay to allow 'display:flex' to apply before transition starts
+                requestAnimationFrame(() => {
+                    showModal();
+                });
+            });
+
+            goToProfileButton.addEventListener('click', () => {
+                window.open('https://scriptblox.com/u/MEGGD', '_blank'); // Open the link
+                hideModal(); // Hide the modal with transition
+            });
+
+            cancelProfileButton.addEventListener('click', () => {
+                hideModal(); // Hide the modal with transition
+            });
+
+            // Close modal if clicked outside of content
+            profileModal.addEventListener('click', (event) => {
+                if (event.target === profileModal) {
+                    hideModal(); // Hide the modal with transition
+                }
+            });
         });
     </script>
 </body>
-                    </html>
+    </html>
