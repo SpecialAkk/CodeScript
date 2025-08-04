@@ -256,6 +256,37 @@
             transform: translateY(0); /* Move to original position */
         }
 
+        /* Fixed Badge Styling */
+        .fixed-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px; /* Default position */
+            background-color: #dc3545; /* Red color for "Fixed" */
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: bold;
+            z-index: 5;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out, visibility 0.5s ease-out;
+        }
+
+        /* Adjust position if both are active */
+        .script-card[data-new-update="true"][data-fixed="true"] .fixed-badge {
+            left: 105px; /* Adjust this value based on the width of the "New Update" badge */
+        }
+
+        .script-card[data-fixed="true"] .fixed-badge {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
         footer {
             background-color: #0a1420;
             color: #a0a0a0;
@@ -368,8 +399,9 @@
     </header>
 
     <main>
-        <section class="script-card" data-new-update="true">
+        <section class="script-card" data-new-update="true" data-fixed="true">
             <div class="new-update-badge">New Update</div>
+            <div class="fixed-badge">Fixed</div>
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/a240211e-de60-4078-8284-715663da996d/1_20250803182522.png" alt="FPS Booster Script Image">
             </div>
@@ -505,8 +537,9 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/Best-Fps
             </div>
         </section>
 
-        <section class="script-card" data-new-update="false">
+        <section class="script-card" data-new-update="false" data-fixed="false">
             <div class="new-update-badge">New Update</div>
+            <div class="fixed-badge">Fixed</div>
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/e61973cb-200f-4166-a3ce-020aeef2607d/3_20250803195707.png" alt="Unknown Battle Simulator Script Image">
             </div>
@@ -538,8 +571,9 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/All-spec
             </div>
         </section>
 
-        <section class="script-card" data-new-update="false">
+        <section class="script-card" data-new-update="false" data-fixed="false">
             <div class="new-update-badge">New Update</div>
+            <div class="fixed-badge">Fixed</div>
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/19c82375-23e2-4e8a-ab63-b5dde0a02f5c/2_20250803194425.png" alt="Anti-Kick Script Image">
             </div>
@@ -700,4 +734,4 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
         });
     </script>
 </body>
-            </html>
+                        </html>
