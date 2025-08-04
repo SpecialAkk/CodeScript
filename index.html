@@ -124,7 +124,7 @@
             align-items: center;
             justify-content: center;
             transition: background-color 0.3s ease, transform 0.2s ease;
-            z-index: 10;
+            z-index: 20;
             padding: 0;
         }
 
@@ -153,7 +153,7 @@
             align-items: center;
             justify-content: center;
             transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
-            z-index: 10;
+            z-index: 20;
             padding: 0;
         }
 
@@ -195,7 +195,7 @@
         }
 
         .info-panel.expanded {
-            max-height: 500px; /* Adjust if content is very long */
+            max-height: 500px;
             padding: 15px;
         }
 
@@ -211,7 +211,7 @@
             font-size: 0.9em;
             line-height: 1.6;
             color: #c0c0c0;
-            margin-bottom: 10px; /* Adjusted for list items too */
+            margin-bottom: 10px;
         }
         .info-panel ul {
             list-style-type: disc;
@@ -226,22 +226,24 @@
             position: absolute;
             top: 10px;
             left: 10px;
-            background-color: #007bff; /* Изменено на синий цвет */
+            background-color: #007bff;
             color: white;
             padding: 5px 10px;
             border-radius: 5px;
             font-size: 0.8em;
             font-weight: bold;
             z-index: 15;
-            opacity: 0; /* Изначально скрыт */
-            visibility: hidden; /* Изначально скрыт */
-            transition: opacity 0.5s ease-out, visibility 0s linear 0.5s; /* Плавное исчезновение */
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+            transition: opacity 0.5s ease-out, visibility 0s linear 0.5s;
         }
 
         .new-update-badge.visible {
             opacity: 1;
             visibility: visible;
-            transition: opacity 0.5s ease-out; /* Плавное появление */
+            pointer-events: auto;
+            transition: opacity 0.5s ease-out;
         }
 
 
@@ -488,13 +490,15 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
 
             const optionsButtons = document.querySelectorAll('.options-button');
             optionsButtons.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const scriptCard = event.target.closest('.script-card');
+                button.addEventListener('click', () => {
+                    const scriptCard = button.closest('.script-card');
                     const infoPanel = scriptCard.querySelector('.info-panel');
                     const ellipsisIcon = button.querySelector('.ellipsis-icon');
                     const closeIcon = button.querySelector('.close-icon');
 
                     infoPanel.classList.toggle('expanded');
 
-                    if (infoPanel.classList.contains('expanded')) {
-                        ellipsisIcon.st
+                    const isExpanded = infoPanel.classList.contains('expanded');
+                    ellipsisIcon.style.display = isExpanded ? 'none' : 'inline';
+                    closeIcon.style.display = isExpanded ? 'inline' : 'none';
+       
