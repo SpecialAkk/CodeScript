@@ -141,12 +141,14 @@
         }
 
         .options-button {
+            /* Adjusted position to move away from image/code */
             position: absolute;
+            top: 15px; /* Pushed down from top */
             right: 15px;
             background-color: transparent;
             color: #007bff;
-            width: 30px;
-            height: 30px;
+            width: 34px; /* Increased size slightly for better click area */
+            height: 34px; /* Increased size slightly for better click area */
             border: none;
             border-radius: 50%;
             cursor: pointer;
@@ -154,7 +156,7 @@
             align-items: center;
             justify-content: center;
             transition: background-color 0.3s ease, transform 0.2s ease, color 0.3s ease;
-            z-index: 10;
+            z-index: 15; /* Ensure it's above other elements if needed */
             padding: 0;
         }
 
@@ -174,6 +176,11 @@
             transform: rotate(90deg);
         }
 
+        .options-button:disabled {
+            cursor: not-allowed;
+            opacity: 0.6;
+        }
+
         .code-block {
             color: #4a90e2;
             overflow-x: auto;
@@ -190,9 +197,9 @@
             margin-top: 15px;
             padding: 0 15px;
             overflow: hidden;
-            transition: max-height 0.5s ease-out, padding 0.5s ease-out;
-            max-height: 0;
+            max-height: 0; /* Hidden by default */
             overflow-y: auto;
+            transition: max-height 0.5s ease-out, padding 0.5s ease-out; /* Smooth transition */
         }
 
         .info-panel.expanded {
@@ -271,13 +278,17 @@
             background-color: rgba(0,0,0,0.6); /* Black w/ opacity */
             align-items: center; /* Center content vertically */
             justify-content: center; /* Center content horizontally */
-            opacity: 0; /* Start hidden for fade-in */
-            transition: opacity 0.3s ease-out; /* Smooth fade for modal background */
+            opacity: 0; /* Initial state for fade-in/out */
+            transition: opacity 0.3s ease-out; /* Smooth transition for opacity */
         }
 
         .modal.show {
-            display: flex; /* Show the modal */
+            display: flex; /* Show flex when active */
             opacity: 1; /* Fade in */
+        }
+
+        .modal.hide {
+            opacity: 0; /* Fade out */
         }
 
         .modal-content {
@@ -290,14 +301,18 @@
             max-width: 400px;
             text-align: center;
             box-shadow: 0 5px 15px rgba(0,0,0,0.5);
-            transform: translateY(-20px); /* Start slightly above for slide-in */
-            transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Smooth slide and fade for content */
-            opacity: 0; /* Start hidden for fade-in */
+            transform: translateY(-20px); /* Initial state for slide-in/out */
+            transition: transform 0.3s ease-out, opacity 0.3s ease-out; /* Smooth transition for transform and opacity */
         }
 
         .modal.show .modal-content {
-            transform: translateY(0); /* Slide to original position */
-            opacity: 1; /* Fade in */
+            transform: translateY(0); /* Slide in */
+            opacity: 1;
+        }
+
+        .modal.hide .modal-content {
+            transform: translateY(-20px); /* Slide out */
+            opacity: 0;
         }
 
         .modal-content p {
@@ -353,7 +368,7 @@
     </header>
 
     <main>
-        <section class="script-card" data-new-update="false">
+        <section class="script-card" data-new-update="true">
             <div class="new-update-badge">New Update</div>
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/a240211e-de60-4078-8284-715663da996d/1_20250803182522.png" alt="FPS Booster Script Image">
@@ -579,20 +594,42 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
 
             const optionsButtons = document.querySelectorAll('.options-button');
             optionsButtons.forEach(button => {
-                button.addEventListener('click', (event) => {
-                    const scriptCard = event.target.closest('.script-card');
-                    const infoPanel = scriptCard.querySelector('.info-panel');
-                    const ellipsisIcon = button.querySelector('.ellipsis-icon');
-                    const closeIcon = button.querySelector('.close-icon');
+                const scriptCard = button.closest('.script-card');
+                const infoPanel = scriptCard.querySelector('.info-panel');
+                const ellipsisIcon = button.querySelector('.ellipsis-icon');
+                const closeIcon = button.querySelector('.close-icon');
 
-                    infoPanel.classList.toggle('expanded');
+                let isAnimating = false;
+
+                button.addEventListener('click', () => {
+                    if (isAnimating) return; // Prevent clicks during animation
+
+                    isAnimating = true;
+                    // Disable the button immediately
+                    button.disabled = true;
 
                     if (infoPanel.classList.contains('expanded')) {
-                        ellipsisIcon.style.display = 'none';
-                        closeIcon.style.display = 'block';
-                    } else {
+                        // Close the panel
+                        infoPanel.classList.remove('expanded');
                         ellipsisIcon.style.display = 'block';
                         closeIcon.style.display = 'none';
+                        // Listen for the end of the transition
+                        infoPanel.addEventListener('transitionend', function handler() {
+                            isAnimating = false;
+                            button.disabled = false; // Enable button after animation
+                            infoPanel.removeEventListener('transitionend', handler);
+                        });
+                    } else {
+                        // Open the panel
+                        infoPanel.classList.add('expanded');
+                        ellipsisIcon.style.display = 'none';
+                        closeIcon.style.display = 'block';
+                        // Listen for the end of the transition
+                        infoPanel.addEventListener('transitionend', function handler() {
+                            isAnimating = false;
+                            button.disabled = false; // Enable button after animation
+                            infoPanel.removeEventListener('transitionend', handler);
+                        });
                     }
                 });
             });
@@ -604,27 +641,23 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
             const cancelProfileButton = document.getElementById('cancelProfile');
 
             function showModal() {
+                profileModal.style.display = 'flex';
+                // Trigger reflow to ensure transition plays
+                profileModal.offsetWidth;
                 profileModal.classList.add('show');
             }
 
             function hideModal() {
                 profileModal.classList.remove('show');
-                // Ensure display: none after transition to prevent interaction
+                profileModal.classList.add('hide');
                 profileModal.addEventListener('transitionend', function handler() {
-                    if (!profileModal.classList.contains('show')) {
-                        profileModal.style.display = 'none';
-                    }
+                    profileModal.style.display = 'none';
+                    profileModal.classList.remove('hide');
                     profileModal.removeEventListener('transitionend', handler);
                 });
             }
 
-            profilePicContainer.addEventListener('click', () => {
-                profileModal.style.display = 'flex'; // Make sure it's visible before adding 'show'
-                // Small delay to allow 'display:flex' to apply before transition starts
-                requestAnimationFrame(() => {
-                    showModal();
-                });
-            });
+            profilePicContainer.addEventListener('click', showModal);
 
             goToProfileButton.addEventListener('click', () => {
                 window.open('https://scriptblox.com/u/MEGGD', '_blank'); // Open the link
@@ -644,4 +677,4 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
         });
     </script>
 </body>
-    </html>
+                        </html>
