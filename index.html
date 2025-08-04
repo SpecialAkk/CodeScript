@@ -59,6 +59,7 @@
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
             display: flex;
             flex-direction: column;
+            position: relative;
         }
 
         .script-image-container {
@@ -210,7 +211,7 @@
             font-size: 0.9em;
             line-height: 1.6;
             color: #c0c0c0;
-            margin-bottom: 10px; /* Adjusted for list items too */
+            margin-bottom: 10px;
         }
         .info-panel ul {
             list-style-type: disc;
@@ -219,6 +220,32 @@
         }
         .info-panel ul li {
             margin-bottom: 5px;
+        }
+
+        /* New Update Badge Styling */
+        .new-update-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #007bff; /* Blue color */
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: bold;
+            z-index: 5;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            opacity: 0; /* Hidden by default */
+            visibility: hidden; /* Hidden by default */
+            transform: translateY(-10px); /* Start slightly above */
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out, visibility 0.5s ease-out; /* Smooth transition */
+        }
+
+        .script-card[data-new-update="true"] .new-update-badge {
+            opacity: 1; /* Fade in */
+            visibility: visible; /* Make visible */
+            transform: translateY(0); /* Move to original position */
         }
 
 
@@ -241,7 +268,7 @@
     </header>
 
     <main>
-        <section class="script-card">
+        <section class="script-card" data-new-update="false"> <div class="new-update-badge">New Update</div>
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/a240211e-de60-4078-8284-715663da996d/1_20250803182522.png" alt="FPS Booster Script Image">
             </div>
@@ -354,7 +381,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/Best-Fps
             </div>
         </section>
 
-        <section class="script-card">
+        <section class="script-card" data-new-update="false"> <div class="new-update-badge">New Update</div>
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/e61973cb-200f-4166-a3ce-020aeef2607d/3_20250803195707.png" alt="Unknown Battle Simulator Script Image">
             </div>
@@ -394,7 +421,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/All-spec
             </div>
         </section>
 
-        <section class="script-card">
+        <section class="script-card" data-new-update="false"> <div class="new-update-badge">New Update</div>
             <div class="script-image-container">
                 <img src="https://ucarecdn.com/19c82375-23e2-4e8a-ab63-b5dde0a02f5c/2_20250803194425.png" alt="Anti-Kick Script Image">
             </div>
@@ -482,4 +509,4 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
         });
     </script>
 </body>
-    </html>
+                        </html>
