@@ -62,6 +62,11 @@
             flex-direction: column;
             position: relative;
         }
+        
+        /* Order the cards dynamically based on 'new script' status */
+        .script-card[data-new-script="true"] {
+            order: -1;
+        }
 
         .script-image-container {
             width: 100%;
@@ -230,6 +235,31 @@
             margin-bottom: 5px;
         }
 
+        /* New Script Badge Styling */
+        .new-script-badge {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #007bff; /* Blue color */
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 0.8em;
+            font-weight: bold;
+            z-index: 5;
+            text-transform: uppercase;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: opacity 0.5s ease-out, transform 0.5s ease-out, visibility 0.5s ease-out;
+        }
+        .script-card[data-new-script="true"] .new-script-badge {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
         /* New Update Badge Styling */
         .new-update-badge {
             position: absolute;
@@ -249,7 +279,11 @@
             transform: translateY(-10px); /* Start slightly above */
             transition: opacity 0.5s ease-out, transform 0.5s ease-out, visibility 0.5s ease-out; /* Smooth transition */
         }
-
+        /* New position for new update when a new script is also present */
+        .script-card[data-new-script="true"][data-new-update="true"] .new-update-badge {
+            left: 115px; /* Adjusted to be next to 'New Script!' with spacing */
+        }
+        
         .script-card[data-new-update="true"] .new-update-badge {
             opacity: 1; /* Fade in */
             visibility: visible; /* Make visible */
@@ -275,10 +309,16 @@
             transform: translateY(-10px);
             transition: opacity 0.5s ease-out, transform 0.5s ease-out, visibility 0.5s ease-out;
         }
-
         /* Adjust position if both are active */
         .script-card[data-new-update="true"][data-fixed="true"] .fixed-badge {
             left: 120px; /* Adjusted position */
+        }
+        /* New position for fixed when a new script is also present */
+        .script-card[data-new-script="true"][data-fixed="true"] .fixed-badge {
+            left: 225px; /* Adjusted position for all three badges */
+        }
+        .script-card[data-new-script="true"][data-new-update="false"][data-fixed="true"] .fixed-badge {
+            left: 115px;
         }
 
         .script-card[data-fixed="true"] .fixed-badge {
@@ -399,7 +439,58 @@
     </header>
 
     <main>
-        <section class="script-card" data-new-update="true" data-fixed="true">
+        <section class="script-card" data-new-script="true" data-new-update="false" data-fixed="false">
+            <div class="new-script-badge">New Script!</div>
+            <div class="new-update-badge">New Update</div>
+            <div class="fixed-badge">Fixed</div>
+            <div class="script-image-container">
+                <img src="https://cdn.discordapp.com/attachments/1394559731426656429/1402341672729448458/file_00000000033c620abc884dacf2334e36.png?ex=68938ff5&is=68923e75&hm=3a40fc2383163f48690f19441b7e0cce474680afc1a041c10216b39df3293c3a&" alt="HitBox Script Image">
+            </div>
+            <div class="script-title-container">
+                <h2>HitBox</h2>
+                <button class="options-button" title="Info & Updates">
+                    <svg class="ellipsis-icon" viewBox="0 0 24 24">
+                        <path d="M12 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/>
+                    </svg>
+                    <svg class="close-icon" style="display:none;" viewBox="0 0 24 24">
+                        <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/>
+                    </svg>
+                </button>
+            </div>
+            <div class="code-container">
+                <pre class="code-block">
+_G.HeadSize = 35
+_G.Disabled = true
+
+game:GetService('RunService').RenderStepped:connect(function()
+if _G.Disabled then
+for i,v in next, game:GetService('Players'):GetPlayers() do
+if v.Name ~= game:GetService('Players').LocalPlayer.Name then
+pcall(function()
+v.Character.HumanoidRootPart.Size = Vector3.new(_G.HeadSize,_G.HeadSize,_G.HeadSize)
+v.Character.HumanoidRootPart.Transparency = 1
+v.Character.HumanoidRootPart.BrickColor = BrickColor.new("Really blue")
+v.Character.HumanoidRootPart.Material = "Neon"
+v.Character.HumanoidRootPart.CanCollide = false
+end)
+end
+end
+end
+end)
+                </pre>
+                <button class="copy-button" title="Copy Code">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M16 1H4c-1.1 0-2 .9-2 2v14h2V3h12V1zm3 4H8c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h11c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 16H8V7h11v14z"/>
+                    </svg>
+                </button>
+                <div class="info-panel">
+                    <h3>Information (HitBox)</h3>
+                    <p>Just increases the player's HitBox, pretty simple script</p>
+                </div>
+            </div>
+        </section>
+
+        <section class="script-card" data-new-script="false" data-new-update="true" data-fixed="true">
             <div class="new-update-badge">New Update</div>
             <div class="fixed-badge">Fixed</div>
             <div class="script-image-container">
@@ -537,7 +628,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/Best-Fps
             </div>
         </section>
 
-        <section class="script-card" data-new-update="false" data-fixed="true">
+        <section class="script-card" data-new-script="false" data-new-update="false" data-fixed="false">
             <div class="new-update-badge">New Update</div>
             <div class="fixed-badge">Fixed</div>
             <div class="script-image-container">
@@ -571,7 +662,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/SUUUUUS00000/All-spec
             </div>
         </section>
 
-        <section class="script-card" data-new-update="false" data-fixed="false">
+        <section class="script-card" data-new-script="false" data-new-update="false" data-fixed="false">
             <div class="new-update-badge">New Update</div>
             <div class="fixed-badge">Fixed</div>
             <div class="script-image-container">
@@ -604,7 +695,6 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
                 </div>
             </div>
         </section>
-
     </main>
 
     <footer>
@@ -734,4 +824,4 @@ loadstring(game:HttpGet('https://raw.githubusercontent.com/SUUUUUS00000/BEST-ANT
         });
     </script>
 </body>
-    </html>
+            </html>
